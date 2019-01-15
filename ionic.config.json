@@ -1,6 +1,8 @@
 {
-    "name": "netsolinrutasboccherini.com.netsolin",
-    "integrations": {},
-    "type": "angular",
-    "id": "f96dd34a"
+  "name": "netsolinrutasboccherini.com.netsolin",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "f96dd34a"
 }
