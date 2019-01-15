@@ -1,0 +1,59 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title class="headercliente">{{_cliente.clienteActual.cliente}}</ion-title>
+        <ion-title class="headercliente"><strong>Pedido - {{prodshop.cod_refinv}}</strong></ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="animated fadeIn">
+    <div class="bg-profile" text-center>
+        <img *ngIf="prodshop.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(prodshop.link_imgfb)" />
+        <img *ngIf="!prodshop.link_imgfb" src="assets/img/imagennodisponible.jpg" />
+    </div>
+    <ion-card no-margin class="animated fadeIn">
+        <ion-card-content class="bg-white">
+            <h3>
+                <ion-text color="bg-white">
+                    {{ prodshop.nombre }}
+                </ion-text>
+            </h3>
+        </ion-card-content>
+        <ion-item class="bg-white">
+            <ion-label>
+                Existencias:
+            </ion-label>
+            <ion-badge slot="end" color="warning">
+                {{ prodshop.existencia }}
+            </ion-badge>
+            <ion-badge slot="end" color="success">
+                {{ prodshop.existencia - cantidad_sol }}
+            </ion-badge>
+
+        </ion-item>
+        <ion-item class="bg-white">
+            <ion-text color="success">
+                {{ prodshop.precio_ven | currency }}
+            </ion-text>
+            <ion-text color="success" slot="end">
+                Total: {{ total_t | currency }}
+            </ion-text>
+        </ion-item>
+
+    </ion-card>
+    <ion-footer>
+        <ion-toolbar>
+            <ion-input slot="start" (ionChange)="total()" [(ngModel)]="cantidad_sol" type="number" min="1" max="1000" step="1" placeholder="Cantidad" clearOnEdit="true">
+            </ion-input>
+            <ion-button slot="end" shape="round" color="success" (click)="addpedido(prodshop, cantidad_sol)">
+                Agregar
+            </ion-button>
+
+        </ion-toolbar>
+    </ion-footer>
+
+</ion-content>

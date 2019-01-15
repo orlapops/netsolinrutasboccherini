@@ -1,0 +1,95 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title class="headercliente">Items a Pedir</ion-title>
+        <ion-title class="headercliente">{{_cliente.clienteActual.cliente}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="animated fadeIn">
+    <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
+        Imprimir Pedido
+    </ion-button>
+
+    <div text-center *ngIf="pedido.length === 0" class="carrito_vacio">
+
+        <ion-icon name="ios-cart-outline" class="icon-5x"></ion-icon>
+        <br> No tiene items a Pedir
+        <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
+            Imprimir Pedido
+        </ion-button>
+    </div>
+    <div *ngIf="pedido.length != 0" class="bg-white">
+        <ion-grid class="bg-white">
+            <ion-row *ngFor="let itemp of pedido; let i = index;">
+                <ion-col>
+                    <img *ngIf="itemp.item.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(itemp.item.link_imgfb)" />
+                    <img *ngIf="!itemp.item.link_imgfb" src="assets/img/imagennodisponible.jpg" />
+                </ion-col>
+                <ion-col>
+                    <ion-card class="bg-white">
+                        <ion-text color="primary" slot="start" tappable routerLink="/prod-detail.ped/{{itemp.item.cod_ref}}">
+                            {{itemp.item.cod_ref}} {{itemp.item.nombre}}
+                        </ion-text>
+                        <ion-input slot="start" (ionChange)="total(itemp,i)" [(ngModel)]="itemp.item.cantidad" type="number" min="1" max="1000" step="1" placeholder="Cantidad" clearOnEdit="true">
+                        </ion-input>
+                        <ion-text color="success" slot="end">
+                            Total: {{ itemp.item.total | currency }}
+                        </ion-text>
+                        <ion-button slot="end" shape="round" color="danger" (click)="deleteItem(itemp)">
+                            Eliminar
+                        </ion-button>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <hr>
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <h3>
+                        <strong>Total:</strong>
+                    </h3>
+                </ion-col>
+                <ion-col>
+                    <h3>
+                        <strong> {{ total_ped | currency }}</strong>
+                    </h3>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-button *ngIf="!grabando_pedido && !_visitas.visita_activa.grb_pedido" slot="end" shape="round" color="success" (click)="realizar_pedido()">
+            Realizar Pedido
+        </ion-button>
+        <!-- <ion-button *ngIf="_visitas.visita_activa.grb_pedido" slot="end" shape="round" color="success" (click)="imprimir_pedido()"> -->
+        <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
+            Imprimir Pedido
+        </ion-button>
+        <ion-card *ngIf="grabando_pedido">
+            <ion-item padding class="animated fadeIn fast">
+                <ion-text color="warning"> Grabando pedido. Por favor espere...</ion-text>
+
+                <ion-spinner name="bubbles"></ion-spinner>
+            </ion-item>
+        </ion-card>
+        <ion-card *ngIf="_visitas.visita_activa.errorgrb_pedido">
+            <ion-item *ngFor="let iteme of _visitas.visita_activa.resgrb_pedido; let i = index;" padding class="animated fadeIn fast">
+                <ion-text color="danger"> {{iteme.menerror}}</ion-text>
+            </ion-item>
+        </ion-card>
+        <ion-card *ngIf="_visitas.visita_activa.grb_pedido">
+            <ion-text color="danger"> {{_visitas.visita_activa.pedido_grabado.men_error}}</ion-text>
+
+            <ion-item *ngFor="let itemp of _visitas.visita_activa.pedido_grabado.ped_grabado; let i = index;" padding class="animated fadeIn fast">
+                <ion-text color="danger"> {{itemp.cod_refven}}</ion-text>
+                <ion-text color="danger"> {{itemp.cantidad}}</ion-text>
+                <ion-text color="danger"> {{itemp.valor_list}}</ion-text>
+                <ion-text color="danger"> {{itemp.valor_neto}}</ion-text>
+            </ion-item>
+        </ion-card>
+
+
+    </div>
+</ion-content>

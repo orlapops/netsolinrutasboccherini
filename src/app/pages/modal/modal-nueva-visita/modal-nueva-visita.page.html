@@ -1,0 +1,61 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Registrar Nueva Visita</ion-title>
+        <ion-buttons slot="end">
+            <ion-button size="small" shape="round" (click)="cerrarModal()" color="tertiary">
+                <ion-icon slot="start" name="close"></ion-icon> Cerrar
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <!-- <ion-toolbar color="primary">
+        <ion-searchbar type="text" placeholder="Find location" animated="true" (ionInput)="setFilteredItems($event)"></ion-searchbar>
+    </ion-toolbar> -->
+</ion-header>
+
+
+<ion-content padding>
+    <ion-card>
+        <ion-card-header>
+            Localización actual
+        </ion-card-header>
+        <ion-card-content>
+            <div style="text-align:center">
+                <h1>
+                    Welcome to {{ title }}!
+                </h1>
+                <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+            </div>
+            <input type="file" (change)="uploadFile($event)">
+            <div>{{ uploadPercent | async }}</div>
+            <a [href]="downloadURL | async">{{ downloadURL | async }}</a>
+
+            <input type="file" (change)="uploadFile($event)">
+            <!-- <div class="profile" text-center>
+                <img-loader [src]="photo" tappable (click)="setPhoto()"></img-loader>
+                <p class="bold" ion-text color="primary" text-center tappable (click)="setPhoto()">{{ 'auth.form.addphoto' | translate }}</p>
+            </div> -->
+            <p><strong>latitud:</strong>{{coords.lat}}<br/>
+                <strong>longitud:</strong>{{coords.lng}}
+            </p>
+            <hr>
+            <p>{{address}}</p>
+            <hr/>
+            <form (ngSubmit)="guardarNuevaVisita()">
+                <ion-item>
+                    <img [src]="imagenPreview" *ngIf="imagenPreview" />
+                    <ion-button icon-left size="small" shape="round" color="tertiary" (click)="mostrar_camara()">
+                        Foto
+                        <ion-icon name="camera"></ion-icon>
+                    </ion-button>
+
+                </ion-item>
+                <hr/>
+                <ion-item>
+                    <ion-label>Descripción</ion-label>
+                    <ion-textarea [(ngModel)]="description" name="description"></ion-textarea>
+                </ion-item>
+                <button ion-button type="submit" block>Guardar Sitio</button>
+            </form>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

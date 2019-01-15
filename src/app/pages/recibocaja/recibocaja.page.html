@@ -1,0 +1,78 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Items Recibo de Caja</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="animated fadeIn">
+    <ion-grid>
+        <ion-row>
+            <ion-col size="12" margin-bottom>
+                <ion-card *ngIf="!recibocaja.length" class="bg-white" margin-top>
+                    <ion-card-content>
+                        <p text-center>
+                            <ion-text color="primary">No tiene Items en Recibo de Caja</ion-text>
+                        </p>
+                    </ion-card-content>
+                </ion-card>
+
+                <ion-list>
+                    <ion-item-sliding *ngFor="let itemr of recibocaja; let i = index;">
+                        <ion-card class="bg-white">
+                            <ion-text color="primary" slot="start" tappable routerLink="/recibo-detail/{{itemr.item.num_obliga}}">
+                                {{itemr.item.num_obliga}} - {{itemr.item.fecha_obl | date: 'shortDate'}}
+                                <p>Saldo:{{itemr.item.saldoini | currency }}</p>
+                            </ion-text>
+                            <ion-label>Abono:</ion-label>
+                            <ion-input slot="start" (ionChange)="total(itemr,i)" [(ngModel)]="itemr.item.abono" type="number" min="1" max="99999999" step="10000" placeholder="Abono" clearOnEdit="true">
+                            </ion-input>
+                            <ion-text color="success" slot="end">
+                                Saldo: {{ itemr.item.saldo | currency }}
+                            </ion-text>
+                            <ion-button slot="end" shape="round" color="danger" (click)="deleteItem(itemr)">
+                                Eliminar
+                            </ion-button>
+                        </ion-card>
+                        <!--             
+                        <ion-item tappable routerLink="/recibo-detail/{{itemr.id}}">
+                            <ion-label>
+                                <h4>
+                                    <ion-text color="primary">{{itemr.item.num_obliga}} - {{itemr.item.fecha_obl | date: 'shortDate'}}</ion-text>
+                                </h4>
+                                <p>Saldo:{{itemr.item.saldoini | currency }}</p>
+                                <p>Abono:{{itemr.item.abono | currency }}</p>
+                                <p>Nuevo Saldo:{{itemr.item.saldo | currency }}</p>
+                            </ion-label>
+                        </ion-item>
+                        <ion-item-options side="end">
+                            <ion-item-option color="danger" (click)="deleteItem(itemr)">Eliminar Item</ion-item-option>
+                        </ion-item-options> -->
+                    </ion-item-sliding>
+                </ion-list>
+
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <h3>
+                    <strong>Total:</strong>
+                </h3>
+            </ion-col>
+            <ion-col>
+                <h3>
+                    <strong> {{ total_recibo | currency }}</strong>
+                </h3>
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+    <ion-button slot="end" shape="round" color="success" (click)="realizar_pedido()">
+        Realizar Pedido
+    </ion-button>
+
+</ion-content>
