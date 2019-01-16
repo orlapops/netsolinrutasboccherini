@@ -39,7 +39,6 @@ export class ClienteProvider {
     constructor(private fbDb: AngularFirestore,
         private http: HttpClient,
         private afStorage: AngularFireStorage,
-        public _visitas: VisitasProvider,
         // public _message: MessageService,
         public _parempre: ParEmpreService) {
             console.log('en constructor cliente ', this.clienteActual);
@@ -179,8 +178,6 @@ export class ClienteProvider {
   //  this._parempre.reg_log('a actualizar ubi fb id_direc: ' , id_direc);
   this.actualizaimagenDirclienteNetsolin(idclie, iddirec, longitud, latitud, '');
   this.fbDb.collection(`/clientes/${idclie}/direcciones/`).doc(id_direc).update({latitud: latitud, longitud: longitud});
-  // Actualizar ubicacion visita actual
-  this._visitas.actualizarUbicaVisitaAct(longitud, latitud);
   }
 
   // Actualiza url firestorage en Netsolin DIRECCION DE UN CLIENTE, para cuando se traiga sea màs rapido

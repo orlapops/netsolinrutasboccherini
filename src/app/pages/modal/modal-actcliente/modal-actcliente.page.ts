@@ -129,6 +129,8 @@ export class ModalActClientePage implements OnInit {
     this._clientes.actualizaubicafirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
       this._visitas.visita_activa.datosgen.id_dir,
       this.coords.lng, this.coords.lat);
+     // Actualizar ubicacion visita actual
+    this._visitas.actualizarUbicaVisitaAct(this.coords.lng, this.coords.lat);
   }
 
   getAddress(coords):any{
