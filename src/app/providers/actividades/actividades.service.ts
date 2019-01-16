@@ -155,7 +155,7 @@ export class ActividadesService implements OnInit {
   ) 
 }    
 actualizafotosVisitafirebase(idclie, idvisita, imageURL): Promise<any> {
-  const storageRef: AngularFireStorageReference = this.afStorage.ref(`/img_visitas/${idclie}/visita/${idvisita}/fotos/imgen1.png`);
+  const storageRef: AngularFireStorageReference = this.afStorage.ref(`/img_visitas/${idclie}/visita/${idvisita}`);
   console.log('en actualizafotosVisitafirebase idclie,iddirec: ', idclie, idvisita);
   return storageRef
     .putString(imageURL, 'base64', {

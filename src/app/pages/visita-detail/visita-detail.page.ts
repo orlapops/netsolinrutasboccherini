@@ -279,21 +279,16 @@ export class VisitaDetailPage implements OnInit {
       this.camera.getPicture(optionscam).then((imageData) => {
         console.log('en mostrar camara2');
         console.log('en mostrar camara2 imageData:',imageData);
-        this.imagenPreview = 'data:image/jpeg;base64,' + imageData;
+        this.imagenPreview = `data:image/jpeg;base64,${imageData}`; 
         console.log('this.imagenPreview:', this.imagenPreview);
         // this._visitas.cargar_imagenb_firebase('1' , this.imagenPreview);
         this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
-          this.visitaID, this.imagenPreview);
+          this.visitaID, imageData);
        }, (err) => {
         // Handle error
         console.log('Error en camara', JSON.stringify(err));
         const nomarch='imagenp.jpg';
         // tslint:disable-next-line:max-line-length
-        const imgprueba = "Qk0qAQAAAAAAAHYAAAAoAAAAEQAAAA8AAAABAAQAAAAAALQAAAATCwAAEwsAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AP//////////8AkJCf+Hd3d3d3d38AkJCf8AAAAAAAAH8AkJCf8P7+/v7+8H8AkJCf8OAA4AAA4H8AkJCf8P7+8P/w8H8AkJCf8OAA4AAA4H8AkJCf8P7+/v7+8H8AkJCf8OAA4AAA4H8AkJCf8P7+8P/w8H8AkJCf8OAA4AAA4H8AkJCf8P7+/v7+8H8AkJCf8AAAAAAAAI8AkJCf//////////8AkJCf//////////8AkJCQ=="      
-        console.log('Error en camara imgprueba:', imgprueba);
-        this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
-          this.visitaID, imgprueba);
-
        });
        console.log('en mostrar camara4');
   }
