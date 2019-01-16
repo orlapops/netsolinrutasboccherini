@@ -148,7 +148,7 @@ export class ClienteProvider {
     console.log('en actualizaimagenClientefirebase idclie,iddirec: ', idclie, iddirec);
     return storageRef
       .putString(imageURL, 'base64', {
-        contentType: 'image/jpg',
+        contentType: 'image/png',
       })
       .then(() => {
         // this._parempre.reg_log('a actualizar img fb clie 2 then: ' , idclie);
