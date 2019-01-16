@@ -271,24 +271,21 @@ export class VisitaDetailPage implements OnInit {
   tomafoto(){
       console.log('en tomafoto camara1');
       const optionscam: CameraOptions = {
-        quality: 40,
+        quality: 60,
         destinationType: this.camera.DestinationType.DATA_URL,
         encodingType: this.camera.EncodingType.PNG,
         mediaType: this.camera.MediaType.PICTURE
       };
       this.camera.getPicture(optionscam).then((imageData) => {
-        console.log('en mostrar camara2');
+        console.log('en mostrar camara2 optionscam:',optionscam);
         console.log('en mostrar camara2 imageData:',imageData);
         this.imagenPreview = `data:image/jpeg;base64,${imageData}`; 
         console.log('this.imagenPreview:', this.imagenPreview);
-        // this._visitas.cargar_imagenb_firebase('1' , this.imagenPreview);
         this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
           this.visitaID, imageData);
        }, (err) => {
         // Handle error
         console.log('Error en camara', JSON.stringify(err));
-        const nomarch='imagenp.jpg';
-        // tslint:disable-next-line:max-line-length
        });
        console.log('en mostrar camara4');
   }

@@ -4,6 +4,7 @@ import { ParEmpreService } from '../providers/par-empre.service';
 import { NetsolinApp } from '../shared/global';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AngularFireStorageReference, AngularFireStorage } from '@angular/fire/storage';
+import { VisitasProvider } from './visitas/visitas.service';
 // tslint:disable-next-line:no-empty-interface
 export interface Icliente {
     cod_tercer: string;
@@ -38,6 +39,7 @@ export class ClienteProvider {
     constructor(private fbDb: AngularFirestore,
         private http: HttpClient,
         private afStorage: AngularFireStorage,
+        public _visitas: VisitasProvider,
         // public _message: MessageService,
         public _parempre: ParEmpreService) {
             console.log('en constructor cliente ', this.clienteActual);
@@ -169,7 +171,7 @@ export class ClienteProvider {
   }      
 
   actualizaubicafirebase(idclie, iddirec, longitud, latitud) {
-    const storageRef: AngularFireStorageReference = this.afStorage.ref(`/img_clientes/${idclie}/direcciones/${iddirec}`);
+    // const storageRef: AngularFireStorageReference = this.afStorage.ref(`/img_clientes/${idclie}/direcciones/${iddirec}`);
     // this._parempre.reg_log('a actualizar ubi fb clie: ' , idclie);
     console.log('en actualizaubicafirebase idclie,iddirec: ', idclie, iddirec);    
    let id_direc = iddirec.toString();
@@ -177,8 +179,9 @@ export class ClienteProvider {
   //  this._parempre.reg_log('a actualizar ubi fb id_direc: ' , id_direc);
   this.actualizaimagenDirclienteNetsolin(idclie, iddirec, longitud, latitud, '');
   this.fbDb.collection(`/clientes/${idclie}/direcciones/`).doc(id_direc).update({latitud: latitud, longitud: longitud});
-  }      
-
+  // Actualizar ubicacion visita actual
+  this._visitas.actualizarUbicaVisitaAct(longitud, latitud);
+  }
 
   // Actualiza url firestorage en Netsolin DIRECCION DE UN CLIENTE, para cuando se traiga sea màs rapido
     actualizaimagenDirclienteNetsolin(idclie, iddirec, longitud, latitud, imageURL: string) {

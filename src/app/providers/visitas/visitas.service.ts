@@ -167,7 +167,13 @@ cargaPeriodoUsuar(pcod_usuar){
       .doc(id).update(datosact);
     }
     
-  //Obtiene visita por id de la visita
+    public actualizarUbicaVisitaAct(longitud, latitud){
+        return this.fbDb
+      .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`)
+      .doc(this.id_visita_activa).update({latitud: latitud, longitud: longitud});
+    }
+
+    //Obtiene visita por id de la visita
   public getIdRegVisita(visitaId: string) {
       console.log('en getIdRegVisita');
     return this.fbDb.collection('reg_visitas').doc(visitaId).valueChanges();
