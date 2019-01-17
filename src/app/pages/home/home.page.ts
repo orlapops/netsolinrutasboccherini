@@ -398,4 +398,15 @@ export class HomePage implements OnInit {
     });
     action.present();
   }
+  colorxEstado(estado) {
+    if (estado === 'C') {
+      return 'bg-red';
+    } else {
+      if (estado === 'A') {
+        return 'bg-verde';
+      } else {
+        return 'bg-white';
+    }
+  }
+  }
 }

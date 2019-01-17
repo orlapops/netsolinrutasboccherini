@@ -184,7 +184,7 @@
                 </ng-container>
 
                 <!-- <ion-item color="dark" tappable routerLink="/hotel-detail/{{visita.id}}" *ngFor="let visita of visitas | slice:4:8; let i = index"> -->
-                <ion-item tappable routerLink="/visita-detail/{{visita.id}}" *ngFor="let visita of _visitas.visitas_pendientes">
+                <ion-item tappable routerLink="/visita-detail/{{visita.id}}" *ngFor="let visita of _visitas.visitas_pendientes" [ngClass]="colorxEstado(visita.data.estado)">
                     <ion-label>
                         <h2 [ngClass]="{'fw700 text-white': !true}">
                             <div class="fechavisita">
@@ -231,7 +231,7 @@
         <ion-card>
             <ion-list>
                 <!-- <ion-item color="dark" tappable routerLink="/hotel-detail/{{visita.id}}" *ngFor="let visita of visitas | slice:4:8; let i = index"> -->
-                <ion-item tappable routerLink="/visita-detail/{{visita.id}}" *ngFor="let visita of _visitas.visitas_cumplidas">
+                <ion-item tappable routerLink="/visita-detail/{{visita.id}}" *ngFor="let visita of _visitas.visitas_cumplidas" [ngClass]="colorxEstado(visita.data.estado)">
                     <ion-label>
                         <h2 [ngClass]="{'fw700 text-white': !true}">
                             <div class="fechavisita">

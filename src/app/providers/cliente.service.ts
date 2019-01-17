@@ -51,8 +51,8 @@ export class ClienteProvider {
     }
     
     public getUbicaActFb(idclie, iddirec){
-      console.log('getClienteFb idclie:' + idclie);
-      console.log('getClienteFb iddirec:' + iddirec);
+      console.log('getUbicaActFb idclie:' + idclie);
+      console.log('getUbicaActFb iddirec:' + iddirec);
       // console.log(this.clienteActual);
       let id_direc = iddirec.toString();
     return this.fbDb.collection(`clientes/${idclie}/direcciones`).doc(id_direc).valueChanges();
@@ -76,6 +76,23 @@ export class ClienteProvider {
       });   
     }
   
+    public guardardireccionesClienteFb(id, direcciones) {
+      console.log('guardardireccionesCliente id:' + id);
+      console.log(direcciones);
+      return new Promise((resolve, reject)=>{
+        let dirlist: AngularFirestoreCollection<any>;
+        dirlist = this.fbDb.collection(`clientes/${id}/direcciones/`);
+        direcciones.forEach((direc: any) => {
+          console.log('recorriendo direcciones :direc ', direc);
+          let iddir   = direc.id_dir;
+          console.log('recorriendo direcciones :iddir ', iddir.toString());
+          dirlist.doc(iddir.toString()).set(direc);
+        });
+        resolve(true);
+      });
+    }
+  
+
     chequeacliente(){
       console.log('cheque cliente this.clienteactualA: ', this.clienteactualA);
     }

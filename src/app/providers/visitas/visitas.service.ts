@@ -197,7 +197,9 @@ cargaPeriodoUsuar(pcod_usuar){
                 //Actualizar en fb
                 this._cliente.guardarClienteFb(cod_tercer).then(res => {
                     console.log('Guardoclientefb res', res);
-                    resolve(true);
+                    this._cliente.guardardireccionesClienteFb(cod_tercer, this._cliente.clienteActual.direcciones).then(() => {
+                        resolve(true);
+                    });
                 })
                 .catch(() => {
                     console.log('error en actualizarclientenetsolinFb guardarClienteFb');
@@ -217,7 +219,7 @@ cargaPeriodoUsuar(pcod_usuar){
 
   //Carga la visita activa busca si esta creada en reg_visitas, si no la crea si esta la trae
   //recibe la visita activa con el id busca y carga cartera de netsolin si no lo ha echo
-  cargaVisitaActiva(visitaAct: any){
+  cargaVisitaActivaUlt(visitaAct: any){
     this.visita_activa = null;
     // this.id_visita_activa = null;
     this.cargo_clienteact = false;
@@ -469,62 +471,6 @@ cargaPeriodoUsuar(pcod_usuar){
   }
 
  
-  // Carga Inventario de la bodega en Netsolin
-// cargaInventarioNetsolin() {
-//     return new Promise((resolve,reject)=>{
-//     if (this.cargoInventarioNetsolin){
-//         console.log('resolve true cargo inventario netsolin por ya estar inciada');
-//         resolve(true); 
-//      }
-//       NetsolinApp.objenvrest.filtro = this._parempre.usuario.bod_factura;
-//       console.log(" cargaInventarioNetsolin 1");
-//       let url= this._parempre.URL_SERVICIOS + "netsolin_servirestgo.csvc?VRCod_obj=INVXBODAPP";
-//       console.log('cargaInventarioNetsolin url', url);
-//       console.log('cargaInventarioNetsolin NetsolinApp.objenvrest', NetsolinApp.objenvrest);
-//       this.http.post( url, NetsolinApp.objenvrest )   
-//        .subscribe( (data:any) =>{ 
-//         console.log(" cargaInventarioNetsolin data:", data);
-//         if( data.error){
-//             console.error(" cargaInventarioNetsolin ", data.error);
-//            this.cargoInventarioNetsolin = false;
-//            this.inventario = null;
-//            resolve(false);
-//           } else{
-//             console.log('Datos traer cargaInventarioNetsolin ', data.inventario);
-//             this.cargoInventarioNetsolin =true;
-//             // this.menerror_usuar="";
-//             this.inventario = data.inventario;
-//             resolve(true);
-//           }
-//         console.log(" cargaInventarioNetsolin 4");
-//        })
-//      });
-//   }
-//   //guardar el inventario en firebase
-//   public guardarInvdFB(id, inventario) {
-//     console.log('guardarInvdFB id:', id, inventario);
-//   return this.fbDb.collection('inventario').doc(id).set(inventario);
-// }
-
-//   //Obtiene inventario bodega de firebase
-//   public getInvdFB(inventarId: string) {
-//     console.log('en getInvdFB');
-//   return this.fbDb.collection('inventario').doc(inventarId).valueChanges();
-// }      
-
-   //cargar de firebase el inventario suscribirse para que quede actualizado
-//    cargaInventariodFB(bodega) {
-//     this.getInvdFB(bodega).subscribe((datos: any) => {
-//         console.log('En cargaInventariodFB 1 datos:', datos);                
-//         if (datos) {
-//             console.log('obtuvo inventario de firebase inventario antes:', this.inventario);
-//             console.log('obtuvo inventario de firebase actual datos:', datos);
-//             this.inventario = datos.inventario;
-//             console.log('obtuvo inventario de firebase inventario despues:', this.inventario);
-//         } 
-//     });
-//    }
-
   clasificaVisitas() {
     //   console.log('clasificando visitas 1');
       this.visitas_cumplidas = this.visitaTodas.filter(reg => reg.data.estado === 'C');

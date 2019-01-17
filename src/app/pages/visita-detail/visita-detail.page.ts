@@ -119,10 +119,14 @@ export class VisitaDetailPage implements OnInit {
             console.log('a buscar ubica act ',this.visita.data.cod_tercer, this.visita.data.id_dir);
             for (var i = 0; i < this.clienteAct.direcciones.length; i++) {
               if (this.clienteAct.direcciones[i].id_dir === this.visita.data.id_dir) {
-                this.ubicaAct = this.clienteAct.direcciones[i];
-                this._visitas.direc_actual =this.ubicaAct;
-                console.log('encontro ubica act; ', this.ubicaAct);
-                this.cargo_ubicaact = true;
+                // this.ubicaAct = this.clienteAct.direcciones[i];
+                this._cliente.getUbicaActFb(this.visita.data.cod_tercer, this.visita.data.id_dir).subscribe((datosc: any) => {
+                  console.log('susc datos cliente fb ', datosc);
+                  this.ubicaAct = datosc;
+                  this._visitas.direc_actual = this.ubicaAct;
+                  console.log('encontro ubica act; ', this.ubicaAct);
+                  this.cargo_ubicaact = true;
+                  });
               }
             }
           });
