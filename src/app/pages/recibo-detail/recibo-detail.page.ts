@@ -16,7 +16,6 @@ export class ReciboDetailPage implements OnInit {
   valor_abono = 0;
   total_t: number;
   oblenRecibo: any;
-
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,

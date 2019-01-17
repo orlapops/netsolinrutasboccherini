@@ -527,6 +527,7 @@ export class ProdsService implements OnInit {
     return promesa;
   }
 
+  
   genera_pedido_netsolin() {
     console.log('dataos para generar pedido this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet);
     console.log('Pedido a genera this.pedido): ', this.pedido);

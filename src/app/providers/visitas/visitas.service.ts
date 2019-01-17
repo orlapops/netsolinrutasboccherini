@@ -185,7 +185,7 @@ cargaPeriodoUsuar(pcod_usuar){
       console.log('en getIdRegVisita');
     return this.fbDb.collection('reg_visitas').doc(visitaId).valueChanges();
   }      
-  
+
   //Actualiza en firebase el cliente
   actualizarclientenetsolinFb(cod_tercer){
     return new Promise((resolve,reject)=>{

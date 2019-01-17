@@ -19,7 +19,6 @@ export class RegActividadesPage implements OnInit {
   tipocrud =  'A';
   actividadAct: any;
   registro: any;
-
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,

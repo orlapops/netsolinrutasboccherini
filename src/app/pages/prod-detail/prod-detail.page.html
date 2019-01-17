@@ -16,7 +16,6 @@
             <ion-icon size="small" color="dark" name="bookmark"></ion-icon>{{_cliente.clienteActual.cliente}}</h6>
         <hr class="bg-tertiary">
     </ion-text>
-
     <div class="bg-profile" text-center>
         <img *ngIf="prodshop.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(prodshop.link_imgfb)" />
         <img *ngIf="!prodshop.link_imgfb" src="assets/img/imagennodisponible.jpg" />

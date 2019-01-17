@@ -30,9 +30,6 @@
             <!-- </ion-item> -->
 
         </ion-card-content>
-        <!-- <p><strong>latitud:</strong>{{coords.lat}}<br/>
-            <strong>longitud:</strong>{{coords.lng}}
-        </p> -->
         <p>{{address}}</p>
         <ion-card-content no-padding>
             <agm-map [latitude]="coords.lat" [longitude]="coords.lng" [zoom]="14" [zoomControl]="false" [styles]="agmStyles" [streetViewControl]="false">

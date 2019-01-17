@@ -25,7 +25,6 @@ export class RecibocajaPage implements OnInit {
   ngOnInit() {
     this.getRecibocaja();
   }
-
   deleteItem(item) {
     this._recibos.borraritemrecibo(item)
       .then(() => {

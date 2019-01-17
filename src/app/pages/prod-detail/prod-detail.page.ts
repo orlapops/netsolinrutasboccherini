@@ -29,7 +29,6 @@ export class ProdDetailPage implements OnInit {
     public router: Router
   ) { }
 
-  
   ngOnInit() {
     // this.prodshop = this.prods.getItem(this.prodID);
     this.prodshop = this.prods.getProd(this.prodID);

@@ -189,7 +189,7 @@ export class ClienteProvider {
     .catch((error) => {
       console.log('Error actualizaimagenClientefirebase putString img:', error);
     });
-  }      
+  }
 
   actualizaubicafirebase(idclie, iddirec, longitud, latitud) {
     // const storageRef: AngularFireStorageReference = this.afStorage.ref(`/img_clientes/${idclie}/direcciones/${iddirec}`);

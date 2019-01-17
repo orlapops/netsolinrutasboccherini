@@ -50,7 +50,7 @@ export class ProdDetailPedPage implements OnInit {
     this.total_t = 0;
     this.total_t = this.cantidad_sol * this.prodshop.precio_ven;    
     return this.total_t;
-  }  
+  }
 
   async addpedido(item) {
 

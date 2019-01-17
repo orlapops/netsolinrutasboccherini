@@ -152,7 +152,6 @@ export class ModalActClientePage implements OnInit {
 
   getAddress(coords):any{
     var geocoder = new google.maps.Geocoder();
-
     return new Promise(function(resolve,reject){
       geocoder.geocode({'location':coords},function(results,status){
         //llamado asincronicamente

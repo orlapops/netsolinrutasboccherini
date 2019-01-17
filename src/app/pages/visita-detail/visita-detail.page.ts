@@ -94,7 +94,6 @@ export class VisitaDetailPage implements OnInit {
       this.cargo_posicion = false;
       console.log('platfom lista');
       this.obtenerPosicion();
-            // Write a string
             // console.log('envando a pruba impresora');
             // this.impresora.write('Hola mundo').then(() => {} );
           });

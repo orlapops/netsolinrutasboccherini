@@ -101,7 +101,6 @@ export class ActividadesService implements OnInit {
       .valueChanges();
   }
 
-
   public grabarActividad(objact) {
     console.log('en grabar actividad coleccion: ',
     `/personal/${this._parempre.usuario.cod_usuar}

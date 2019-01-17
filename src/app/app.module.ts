@@ -20,7 +20,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { TranslateProvider } from './providers';
-
 // Modal Pages
 import { ImagePageModule } from './pages/modal/image/image.module';
 import { LocationPageModule } from './pages/modal/location/location.module';

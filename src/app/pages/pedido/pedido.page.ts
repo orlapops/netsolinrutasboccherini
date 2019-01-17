@@ -31,9 +31,8 @@ export class PedidoPage implements OnInit {
     public _visitas: VisitasProvider
 
     ) { }
-
   ngOnInit() {
-    this.getPedido();    
+    this.getPedido();
   }
 
   deleteItem(item) {

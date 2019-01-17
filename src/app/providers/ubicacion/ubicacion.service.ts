@@ -24,7 +24,6 @@ export class UbicacionProvider {
     this.usuario = this.afDB.collection(`/personal/`).doc(this._parEmpre.usuario.cod_usuar);
   }
 
-
   iniciarGeoLocalizacion() {
  console.log('inicia geoloca');
     this.geolocation.getCurrentPosition().then((resp) => {

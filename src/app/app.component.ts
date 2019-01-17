@@ -104,7 +104,7 @@ export class AppComponent {
       });
       this._parEmpreProv.cargarLicenciaStorage().then( existe => {  
         this.statusBar.styleDefault();
-        this.splashScreen.hide();  
+        this.splashScreen.hide();
         //si existe contnua verificando parametros
         if ( existe ) {
               // this._parEmpreProv.reg_log('app.component cargo licencia url:', this._parEmpreProv.URL_SERVICIOS);
