@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { NavController, ModalController, ActionSheetController } from '@ionic/angular';
+import { NavController, ModalController, ActionSheetController, Platform } from '@ionic/angular';
 import { VisitasProvider } from '../../../providers/visitas/visitas.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
@@ -25,6 +25,7 @@ export class ModalActClientePage implements OnInit {
   foto: any = '';
   imagenPreview: string;
   agmStyles: any[] = environment.agmStyles;
+  cargo_posicion = false;
   private photo: string = 'assets/img/logo.png';
   private userId: string;
 
@@ -34,18 +35,27 @@ export class ModalActClientePage implements OnInit {
 
   constructor(private modalCtrl: ModalController,
     public _visitas: VisitasProvider,
+    public platform: Platform,
     public _clientes: ClienteProvider,
     public geolocation: Geolocation,
     private actionSheetCtrl: ActionSheetController,
     private storage: AngularFireStorage,
     public _DomSanitizer: DomSanitizer,
-    private camera: Camera) { }
-  
+    private camera: Camera) { 
+      console.log('llega coords:',  this.coords);
+      platform.ready().then(() => {
+        // La plataforma esta lista y ya tenemos acceso a los plugins.
+        this.cargo_posicion = false;
+        console.log('platfom lista');
+        this.obtenerPosicion();
+      });
+    }  
 
   ngOnInit() {
     console.log('ngOnInit ModalActClientePage this._visitas.visita_activa: ', this._visitas.visita_activa);
     console.log('ngOnInit ModalActClientePage _clientes.clienteActual:', this._clientes.clienteActual);
     console.log('ngOnInit ModalActClientePage _visitas.direc_actual:', this._visitas.direc_actual);
+
 
     // this.coords.lat = this.navParams.get('lat');
     // this.coords.lng = this.navParams.get('lng');
@@ -107,8 +117,8 @@ export class ModalActClientePage implements OnInit {
       this.imagenPreview = `data:image/jpeg;base64,${imageData}`; 
       console.log('this.imagenPreview:', this.imagenPreview);
       // this._visitas.cargar_imagenb_firebase('1' , this.imagenPreview);
-      this._clientes.actualizaimagenClientefirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
-        this._visitas.visita_activa.datosgen.id_dir,
+      this._clientes.actualizaimagenClientefirebase(this._visitas.visita_activa_copvdet.cod_tercer,
+        this._visitas.visita_activa_copvdet.id_dir,
         imageData);
         // this.imagenPreview);
      }, (err) => {
@@ -117,8 +127,8 @@ export class ModalActClientePage implements OnInit {
       // const nomarch='imagenp.jpg';
       // const imgprueba = "Qk0qAQAAAAAAAHYAAAAoAAAAEQAAAA8AAAABAAQAAAAAALQAAAATCwAAEwsAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AP//////////8AkJCf+Hd3d3d3d38AkJCf8AAAAAAAAH8AkJCf8P7+/v7+8H8AkJCf8OAA4AAA4H8AkJCf8P7+8P/w8H8AkJCf8OAA4AAA4H8AkJCf8P7+/v7+8H8AkJCf8OAA4AAA4H8AkJCf8P7+8P/w8H8AkJCf8OAA4AAA4H8AkJCf8P7+/v7+8H8AkJCf8AAAAAAAAI8AkJCf//////////8AkJCf//////////8AkJCQ=="      
       // console.log('Error en camara imgprueba:', imgprueba);
-      // this._clientes.actualizaimagenClientefirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
-      //   this._visitas.visita_activa.datosgen.id_dir,
+      // this._clientes.actualizaimagenClientefirebase(this._visitas.visita_activa_copvdet.cod_tercer, 
+      //   this._visitas.visita_activa_copvdet.id_dir,
       //   imgprueba);
      });
      console.log('en mostrar camara4');
@@ -126,11 +136,18 @@ export class ModalActClientePage implements OnInit {
   }
 
   actualiza_ubicaciongps(){
-    this._clientes.actualizaubicafirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
-      this._visitas.visita_activa.datosgen.id_dir,
+    console.log('actualiza_ubicaciongps', this.coords);
+    this._clientes.actualizaubicafirebase(this._visitas.visita_activa_copvdet.cod_tercer, 
+      this._visitas.visita_activa_copvdet.id_dir,
       this.coords.lng, this.coords.lat);
      // Actualizar ubicacion visita actual
-    this._visitas.actualizarUbicaVisitaAct(this.coords.lng, this.coords.lat);
+     const datactvisita = {
+      estado : 'A',
+      latitud : this.coords.lat,
+      longitud : this.coords.lng
+    };
+    this._visitas.actualizarVisita(this._visitas.visita_activa_copvdet.id_visita, datactvisita);
+    // this._visitas.actualizarUbicaVisitaAct(this.coords.lng, this.coords.lat);
   }
 
   getAddress(coords):any{
@@ -158,5 +175,25 @@ export class ModalActClientePage implements OnInit {
   }
 guardarNuevaVisita(){
 
+}
+obtenerPosicion(): any {
+  console.log('en obtener posicion', this.coords);
+  this.geolocation
+    .getCurrentPosition()
+    .then(res => {
+      this.coords.lat = res.coords.latitude;
+      this.coords.lng = res.coords.longitude;
+      this.cargo_posicion = true;
+      console.log('res ok obtener posicion', this.coords);
+      // this.loadMap();
+    })
+    .catch(error => {
+      console.log(error.message);
+      this.coords.lat = 4.625749001284896;
+      this.coords.lng = -74.078441;
+      this.cargo_posicion = true;
+      console.log('res error obtener posicion', this.coords);
+      // this.loadMap();
+    });
 }
 }

@@ -11,6 +11,12 @@
 
 
 <ion-content class="animated fadeIn">
+    <ion-text color="primary">
+        <h6>
+            <ion-icon size="small" color="dark" name="bookmark"></ion-icon>{{_cliente.clienteActual.cliente}}</h6>
+        <hr class="bg-tertiary">
+    </ion-text>
+
     <div class="bg-profile" text-center>
         <img *ngIf="prodshop.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(prodshop.link_imgfb)" />
         <img *ngIf="!prodshop.link_imgfb" src="assets/img/imagennodisponible.jpg" />
@@ -37,10 +43,10 @@
         </ion-item>
         <ion-item class="bg-white">
             <ion-text color="success">
-                {{ prodshop.precio_ven | currency }}
+                {{ prodshop.precio_ven | currency:'COP':'symbol-narrow' }}
             </ion-text>
             <ion-text color="success" slot="end">
-                Total: {{ total_t | currency }}
+                Total: {{ total_t | currency:'COP':'symbol-narrow' }}
             </ion-text>
         </ion-item>
         <div class="bg-white">

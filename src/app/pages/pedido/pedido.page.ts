@@ -84,8 +84,6 @@ export class PedidoPage implements OnInit {
     });
   }
   imprimir_pedido() {
-    // this._visitas.visita_activa.pedido_grabado
-    // _visitas.visita_activa.pedido_grabado.ped_grabado
     let printer;
     this.btCtrl.list().then(async datalist => {
       let sp = datalist;

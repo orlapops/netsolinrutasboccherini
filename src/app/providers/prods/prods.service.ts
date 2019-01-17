@@ -283,10 +283,10 @@ export class ProdsService implements OnInit {
   }
 
   buscarProductoPed(searchKey: string) {
-    // console.log("buscarProductoPed searchKey:", searchKey);
+    console.log("buscarProductoPed searchKey:", searchKey);
     let key: string = searchKey.toUpperCase();
     // console.log("buscarProductoPed key:", key);
-    // console.log(this.inventarioPed);
+    console.log(this.inventarioPed);
     return Promise.resolve(
       this.inventarioPed.filter(
         (item: any) =>
@@ -431,9 +431,9 @@ export class ProdsService implements OnInit {
   public guardar_storage_factura() {
     // console.log("ngoniit prod service visita");
     // console.log(this._visitas.visita_activa);
-    let idruta = this._visitas.visita_activa.datosgen.id_ruta;
-    let idvisiact = this._visitas.visita_activa.datosgen.id_visita;
-    let idifact = idruta.toString() + idvisiact.toString();
+    const idruta = this._visitas.visita_activa_copvdet.id_ruta;
+    const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
+    const idifact = idruta.toString() + idvisiact.toString();
     if (this.platform.is("cordova")) {
       // dispositivo
       this.storage.set("itemfac" + idifact, this.factura);
@@ -444,9 +444,11 @@ export class ProdsService implements OnInit {
   }
 
   public guardar_storage_pedido() {
-    let idruta = this._visitas.visita_activa.datosgen.id_ruta;
-    let idvisiact = this._visitas.visita_activa.datosgen.id_visita;
-    let idiped = idruta.toString() + idvisiact.toString();
+    const idruta = this._visitas.visita_activa_copvdet.id_ruta;
+    const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
+    // const idruta = this._visitas.visita_activa_copvdet.datosgen.id_ruta;
+    // const idvisiact = this._visitas.visita_activa_copvdet.datosgen.id_visita;
+    const idiped = idruta.toString() + idvisiact.toString();
     if (this.platform.is("cordova")) {
       // dispositivo
       this.storage.set("itemped" + idiped, this.pedido);
@@ -458,9 +460,9 @@ export class ProdsService implements OnInit {
 
   cargar_storage_factura(idruta, idvisiact) {
     // console.log("cargar_storage_factura 1", this._visitas);
-    // // let idruta = this._visitas.visita_activa.datosgen.id_ruta;
+    // // let idruta = this._visitas.visita_activa_copvdet.datosgen.id_ruta;
     // console.log("cargar_storage_factura 2", idruta);
-    // // let idvisiact = this._visitas.visita_activa.datosgen.id_visita;
+    // // let idvisiact = this._visitas.visita_activa_copvdet.datosgen.id_visita;
     // console.log("cargar_storage_factura 3", idvisiact);
     let idifact = idruta.toString() + idvisiact;
     // console.log("cargar_storage_factura 4", idifact);
@@ -492,9 +494,9 @@ export class ProdsService implements OnInit {
   }
   cargar_storage_pedido(idruta, idvisiact) {
     // console.log("cargar_storage_pedido 1", this._visitas);
-    // // let idruta = this._visitas.visita_activa.datosgen.id_ruta;
+    // // let idruta = this._visitas.visita_activa_copvdet.datosgen.id_ruta;
     // console.log("cargar_storage_pedido 2", idruta);
-    // // let idvisiact = this._visitas.visita_activa.datosgen.id_visita;
+    // // let idvisiact = this._visitas.visita_activa_copvdet.datosgen.id_visita;
     // console.log("cargar_storage_pedido 3", idvisiact);
     let idiped = idruta.toString() + idvisiact;
     // console.log("cargar_storage_pedido 4", idiped);
@@ -526,18 +528,19 @@ export class ProdsService implements OnInit {
   }
 
   genera_pedido_netsolin() {
-    console.log('dataos para generar pedido this._visitas.visita_activa.datosgen:', this._visitas.visita_activa.datosgen);
+    console.log('dataos para generar pedido this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet;
     console.log('Pedido a genera this.pedido): ', this.pedido);
     // return new Promise((resolve, reject) => {
     //   resolve(true);
     // });
-    this._visitas.visita_activa.grb_pedido = false;
-    this._visitas.visita_activa.resgrb_pedido = '';
-    this._visitas.visita_activa.pedido_grabado = null;
-    this._visitas.visita_activa.errorgrb_pedido = false;
+    this._visitas.visita_activa_copvdet.grb_pedido = false;
+    this._visitas.visita_activa_copvdet.resgrb_pedido = '';
+    this._visitas.visita_activa_copvdet.pedido_grabado = null;
+    this._visitas.visita_activa_copvdet.errorgrb_pedido = false;
     return new Promise((resolve, reject) => {
       let paramgrab = {
-        datos_gen: this._visitas.visita_activa.datosgen,
+        // datos_gen: this._visitas.visita_activa_copvdet.datosgen,
+        datos_gen: this._visitas.visita_activa_copvdet,
         items_pedido: this.pedido,
         usuario: this._parempre.usuario
       };
@@ -549,26 +552,26 @@ export class ProdsService implements OnInit {
       this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
         console.log(" genera_pedido_netsolin data:", data);
         if (data.error) {
-          this._visitas.visita_activa.errorgrb_pedido = true;
-          this._visitas.visita_activa.grb_pedido = false;
-          this._visitas.visita_activa.resgrb_pedido = data.men_error;      
+          this._visitas.visita_activa_copvdet.errorgrb_pedido = true;
+          this._visitas.visita_activa_copvdet.grb_pedido = false;
+          this._visitas.visita_activa_copvdet.resgrb_pedido = data.men_error;      
           console.error(" genera_pedido_netsolin ", data.men_error);
           // this.cargoInventarioNetsolinPed = false;
           // this.inventarioPed = null;
           resolve(false);
         } else {
           if (data.isCallbackError || data.error) {
-            this._visitas.visita_activa.errorgrb_pedido = true;
-            this._visitas.visita_activa.grb_pedido = false;
-            // this._visitas.visita_activa.resgrb_pedido = data.messages[0].menerror;      
-            this._visitas.visita_activa.resgrb_pedido = data.messages;      
+            this._visitas.visita_activa_copvdet.errorgrb_pedido = true;
+            this._visitas.visita_activa_copvdet.grb_pedido = false;
+            // this._visitas.visita_activa_copvdet.resgrb_pedido = data.messages[0].menerror;      
+            this._visitas.visita_activa_copvdet.resgrb_pedido = data.messages;      
             console.error(" Error genera_pedido_netsolin ", data.messages[0].menerror);
             resolve(false);
           } else {
-          this._visitas.visita_activa.errorgrb_pedido = false;
-          this._visitas.visita_activa.grb_pedido = true;
-          this._visitas.visita_activa.resgrb_pedido = 'Se grabo pedido';      
-          this._visitas.visita_activa.pedido_grabado = data;
+          this._visitas.visita_activa_copvdet.errorgrb_pedido = false;
+          this._visitas.visita_activa_copvdet.grb_pedido = true;
+          this._visitas.visita_activa_copvdet.resgrb_pedido = 'Se grabo pedido';      
+          this._visitas.visita_activa_copvdet.pedido_grabado = data;
           console.log("Datos traer genera_pedido_netsolin ",data);
           const objpedidogfb ={
             cod_dpedid : data.cod_dpedidg,

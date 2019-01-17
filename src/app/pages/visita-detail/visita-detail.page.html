@@ -21,7 +21,8 @@
     </ion-toolbar>
 </ion-header>
 
-<div *ngIf="!cargoVisitaActual || !_visitas.cargo_clienteact">
+<div *ngIf="!cargoVisitaActual || !cargo_clienteact">
+    <!-- <div *ngIf="!cargoVisitaActual || !_visitas.cargo_clienteact"> -->
     <ion-card>
         <ion-item padding class="animated fadeIn fast">
             <ion-text color="warning"> Cargando datos cliente. Por favor espere...</ion-text>
@@ -29,14 +30,14 @@
         </ion-item>
     </ion-card>
 </div>
-<ion-content class="animated fadeIn" *ngIf="cargoVisitaActual && _visitas.cargo_clienteact">
+<ion-content class="animated fadeIn" *ngIf="cargoVisitaActual && cargo_clienteact">
     <ion-slides pager="true" class="margin-bottom">
         <ion-slide *ngFor="let image of visita.images" (click)="presentImage(image)">
             <img [src]="image">
             <div class="shadow"></div>
         </ion-slide>
     </ion-slides>
-    <div padding-horizontal *ngIf="_cliente.clienteActual" class="ion-padding">
+    <div padding-horizontal *ngIf="cargo_clienteact" class="ion-padding">
 
         <ion-segment [(ngModel)]="visitaSegment" class="background-tolbar">
             <ion-segment-button value="details" class="btdetalles-color text-color">
@@ -58,15 +59,15 @@
 
         <div [ngSwitch]="visitaSegment">
             <div *ngSwitchCase="'details'" class="bg-white detalles-padding">
-
                 <ion-card no-margin margin-top margin-bottom class="animated fadeIn margin-bottom margin-top">
                     <ion-item [ngClass]="colorxEstado(visitaAct.estado)" class="background">
                         <ion-grid class="size-col">
                             <ion-row>
                                 <ion-col size="3">
                                     <ion-avatar>
-                                        <img *ngIf="_visitas.direc_actual != null" [src]="_DomSanitizer.bypassSecurityTrustUrl(_visitas.direc_actual.link_foto)" />
-                                        <!-- <img *ngIf="!_visitas.direc_actual.link_foto" src="assets/img/imagennodisponible.jpg" width="200px" /> -->
+                                        <!-- <img *ngIf="_visitas.direc_actual != null" [src]="_DomSanitizer.bypassSecurityTrustUrl(_visitas.direc_actual.link_foto)" /> -->
+                                        <img *ngIf="cargo_ubicaact && ubicaAct.link_foto" [src]="_DomSanitizer.bypassSecurityTrustUrl(ubicaAct.link_foto)" />
+                                        <img *ngIf="cargo_ubicaact && !ubicaAct.link_foto" src="assets/img/imagennodisponible.jpg" />
                                     </ion-avatar>
                                 </ion-col>
                                 <ion-col size="9" class="text-align">
@@ -101,7 +102,7 @@
                             <ion-icon name="log-in"></ion-icon>
                         </ion-fab-button>
                     </ion-fab>
-                    <ion-fab *ngIf="visitaAct.estado == 'A'" vertical="center" horizontal="start" slot="fixed">
+                    <ion-fab *ngIf="visitaAct.estado == 'A' && cargo_posicion" vertical="center" horizontal="start" slot="fixed">
                         <ion-fab-button color="warning" (click)="actualizarCliente()">
                             <ion-icon name="pin"></ion-icon>
                             <ion-icon name="create"></ion-icon>
@@ -153,7 +154,7 @@
                 </ion-card>
             </div>
 
-            <div *ngIf="_visitas.visita_activa">
+            <div *ngIf="cargoVisitaActual">
                 <div no-margin *ngSwitchCase="'actividades'" class="bg-white actividades-padding">
                     <div class="booking-card">
 
@@ -164,9 +165,9 @@
                         </ion-fab>
                         <ion-text color="primary text-align">
                             <h6 class="fw500">
-                                <ion-icon size="medium" color="dark" name="contact"></ion-icon>{{ _visitas.visita_activa.datosgen.nombre }}</h6>
+                                <ion-icon size="medium" color="dark" name="contact"></ion-icon>{{ visitaAct.nombre }}</h6>
                             <h6 color="light" margin-bottom class="h6">
-                                <ion-icon size="medium" color="dark" name="locate"></ion-icon>{{_visitas.visita_activa.datosgen.direccion}}</h6>
+                                <ion-icon size="medium" color="dark" name="locate"></ion-icon>{{visitaAct.direccion}}</h6>
                         </ion-text>
                         <hr class="bg-tertiary margin-special">
                         <ion-text color="primary">
@@ -237,101 +238,24 @@
                                             </p>
                                         </h3>
                                     </ion-label>
-
                                 </ion-item>
                             </ion-card-content>
-                            <!-- <ion-list no-margin margin-vertical class="bg-white" tappable routerLink="/regactividades/{{item.id}}" *ngFor="let item of listaactividades">
-                                <ion-label color="secondary">
-                                    <ion-icon name="clock"></ion-icon> {{ item.registro | date: 'medium'}}
-                                </ion-label>
-                                <div no-margin class="bg-white">
-                                    <ion-text slot="start" color="dark" class="rooms">
-                                        {{ item.nom_tipoact }}
-                                    </ion-text>
-                                </div>
-                                <div no-margin class="bg-white">
-                                    <ion-text slot="start" color="dark" class="rooms">
-                                        {{ item.notas }}
-                                    </ion-text>
-                                </div>
-                            </ion-list> -->
                         </ion-card>
                         <hr class="bg-tertiary">
-
-
-                        <!-- <ion-card no-margin class="profile">
-                            <ion-fab *ngIf="visitaAct.estado == 'A'" vertical="start" horizontal="end">
-                                <ion-fab-button color="warning" (click)="tomafoto()">
-                                    <ion-icon name="camera"></ion-icon>
-                                    <ion-icon name="create"></ion-icon>
-                                </ion-fab-button>
-                            </ion-fab>
-    
-                            <ion-card-content no-margin class="profile">
-                                <h3 class="fw500">{{ _visitas.visita_activa.datosgen.nombre }}</h3>
-                                <h4 color="light" margin-bottom>{{_visitas.visita_activa.datosgen.direccion}}</h4>
-                                <ion-button icon-left color="secondary" routerLink="/regactividades/0">
-                                    <ion-icon name="book"></ion-icon>
-                                    Registrar Actividad v
-                                </ion-button>
-                            </ion-card-content>
-                            <ion-card-content no-margin class="bg-white">
-                                <ion-slides pager="true" margin-bottom>
-                                    <ion-slide *ngFor="let foto of listafotos | slice:0:4; let i = index">
-                                        <ion-grid no-padding>
-                                            <ion-row>
-                                                <ion-col size="12">
-                                                    <ion-card class="actividadesCard">
-                                                        <ion-img [src]="foto.link_foto"></ion-img>
-    
-                                                        <ion-card-subtitle>
-                                                            <ion-badge color="danger" (click)="eliminarFoto(foto)">
-                                                                <ion-icon name="trash" class="trash_icon"></ion-icon>
-                                                            </ion-badge>
-                                                        </ion-card-subtitle>
-                                                    </ion-card>
-                                                </ion-col>
-                                            </ion-row>
-                                        </ion-grid>
-    
-                                    </ion-slide>
-                                </ion-slides>
-    
-    
-                                <ion-card no-margin margin-vertical class="bg-white" tappable routerLink="/regactividades/{{item.id}}" *ngFor="let item of listaactividades">
-                                    <ion-card-subtitle>
-                                        <ion-badge color="warning">
-                                            <ion-icon name="clock"></ion-icon> {{ item.registro | date: 'medium'}}
-                                        </ion-badge>
-                                    </ion-card-subtitle>
-                                    <ion-card-subtitle>{{ item.nom_tipoact }}</ion-card-subtitle>
-                                    <ion-card-content no-margin class="bg-white">
-                                        <ion-text slot="start" color="light" class="rooms">
-                                            {{ item.notas }}
-                                        </ion-text>
-                                    </ion-card-content>
-                                </ion-card>
-                            </ion-card-content>
-                        </ion-card> -->
                     </div>
                 </div>
             </div>
-            <div *ngIf="_visitas.visita_activa">
-                <!-- <div *ngSwitchCase="'cartera'" [@staggerIn]='_visitas.visita_activa.cartera.length'> -->
-                <div *ngSwitchCase="'cartera'" [@staggerIn]='_cliente.clienteActual.cartera.length' class="bg-white cartera-padding">
+            <div *ngIf="cargoVisitaActual">
+                <div *ngSwitchCase="'cartera'" [@staggerIn]='clienteAct.cartera.length' class="bg-white cartera-padding">
                     <ion-text color="primary">
                         <h6>
-                            <ion-icon size="small" color="dark" name="bookmark"></ion-icon>{{_cliente.clienteActual.cliente}}</h6>
+                            <ion-icon size="small" color="dark" name="bookmark"></ion-icon>{{clienteAct.cliente}}</h6>
                     </ion-text>
                     <hr class="bg-tertiary">
 
                     <ion-card *ngIf="_parEmpre.usuario.recauda" class="facturaCard">
-                        <!-- <ion-card-header>
-                                <ion-card-subtitle>Cartera {{_visitas.visita_activa.datosgen.nombre}}</ion-card-subtitle>
-                            </ion-card-header> -->
-                        <ion-card-content>
-                            <!-- <ion-card no-margin margin-vertical class="bg-white" *ngFor="let item of _visitas.visita_activa.cartera"> -->
-                            <ion-card no-margin margin-vertical class="bg-white" *ngFor="let item of _cliente.clienteActual.cartera">
+                        <!-- <ion-card-content>
+                            <ion-card no-margin margin-vertical class="bg-white" *ngFor="let item of clienteAct.cartera">
                                 <ion-item>
                                     <p>
                                         Obligación: {{item.num_obliga}} {{item.fecha_obl | date: 'shortDate'}}
@@ -340,69 +264,56 @@
                                         Saldo: {{item.saldo | currency }}
                                     </p>
                                 </ion-item>
-                                <!-- <ion-item>
-                                        <ion-text slot="start" color="secondary">{{item.fecha_obl | date: 'shortDate'}}</ion-text>
-                                        <ion-text slot="end" color="primary">Obligación: {{item.num_obliga}}</ion-text>
-                                    </ion-item>
-                                    <ion-item>
-                                        <ion-badge *ngIf="item.dias_venci>0" slot="start" color="danger" margin-bottom>{{ item.dias_venci }} días de vencida</ion-badge>
-                                        <ion-text slot="end" color="primary">Saldo: {{item.saldo | currency :"USD":true}}</ion-text>
-                                    </ion-item> -->
                                 <ion-button size="small" shape="round" expand="full" color="warning" routerLink="/recibo-detail/{{item.num_obliga}}">
                                     <ion-icon slot="start" name="book"></ion-icon>
                                     Detalle Obligacoón
                                 </ion-button>
                             </ion-card>
+                        </ion-card-content> -->
+                        <ion-card-content no-margin margin-vertical class="bg-white" *ngFor="let item of clienteAct.cartera">
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col size="6">
+                                        <ion-icon name="checkbox" color="primary"></ion-icon>Obligación: {{item.num_obliga}}
+                                    </ion-col>
+                                    <ion-col size="6">
+                                        <ion-icon name="alarm" color="primary"></ion-icon>{{item.fecha_obl | date: 'shortDate'}}
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="5">
+                                        <ion-badge *ngIf="item.dias_venci>0" color="danger" margin-bottom>{{ item.dias_venci }} días de vencida</ion-badge>
+                                    </ion-col>
+                                    <ion-col size="7">
+                                        <p class="saldo-cartera">Saldo:{{item.saldo | currency }}</p>
+                                    </ion-col>
+
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-button size="small" shape="round" expand="full" color="warning" routerLink="/recibo-detail/{{item.num_obliga}}">
+                                            <ion-icon slot="start" name="book"></ion-icon>
+                                            Detalle Obligación
+                                        </ion-button>
+                                    </ion-col>
+
+                                </ion-row>
+                            </ion-grid>
                         </ion-card-content>
                     </ion-card>
                 </div>
             </div>
-            <!-- <div *ngSwitchCase="'facturar'">
-                    <ion-card *ngIf="_parEmpre.usuario.cap_factura" class="facturaCard">
-                        <ion-toolbar>
-                            <ion-searchbar [(ngModel)]="buscar_item" (ionInput)="buscar_productos($event)" placeholder="Buscar producto"></ion-searchbar>
-                            <div *ngIf="searching" class="spinner-container">
-                                <ion-spinner></ion-spinner>
-                            </div>
-                        </ion-toolbar>
-                        <ion-card-header>
-                            <ion-card-subtitle>Inventario Disponible: {{_parEmpre.usuario.bod_factura}}</ion-card-subtitle>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <ion-card no-margin margin-vertical class="bg-white" *ngFor="let item of productos_bus">
-                                <ion-item>
-                                    <img *ngIf="item.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(item.link_imgfb)" />
-                                    <img *ngIf="!item.link_imgfb" src="assets/img/logoempre.jpg" />
-                                    <p>
-                                        {{item.cod_refinv}} {{item.nombre}}
-                                        <br> Existencias: {{item.existencia}} Precio: {{item.precio_ven | currency :"USD":true}}
-                                    </p>
-                                </ion-item>
-                                <ion-button size="small" shape="round" expand="full" color="success" routerLink="/prod-detail/{{item.cod_refinv}}">
-                                    <ion-icon slot="start" name="cart"></ion-icon>
-                                    Detalle Producto
-                                </ion-button>
-                            </ion-card>
-                        </ion-card-content>
-                    </ion-card>
-                </div> -->
             <div *ngSwitchCase="'facturar'">
                 <div *ngIf="_parEmpre.usuario.cap_factura" class="bg-white facturar-padding">
                     <ion-text color="primary">
                         <h6>
-                            <ion-icon size="small" color="dark" name="paper"></ion-icon> {{_cliente.clienteActual.cliente}}</h6>
+                            <ion-icon size="small" color="dark" name="paper"></ion-icon> {{clienteAct.cliente}}</h6>
                     </ion-text>
                     <hr class="bg-tertiary">
-                    <!-- <ion-toolbar> -->
                     <ion-searchbar [(ngModel)]="buscar_item" (ionInput)="buscar_productos($event)" placeholder="Buscar Producto"></ion-searchbar>
                     <div *ngIf="searching" class="spinner-container">
                         <ion-spinner></ion-spinner>
                     </div>
-                    <!-- </ion-toolbar> -->
-                    <!-- <ion-card-header>
-                            <ion-card-subtitle>Inventario Disponible: {{_parEmpre.usuario.bod_factura}}</ion-card-subtitle>
-                        </ion-card-header> -->
-                    <!-- <div> -->
                     <ion-card no-margin margin-vertical class="bg-white margin-top margin-bottom" *ngFor="let item of productos_bus">
                         <ion-grid>
                             <ion-row>
@@ -412,8 +323,6 @@
                                         <a routerLink="/prod-detail/{{item.cod_refinv}}">
                                             <img *ngIf="item.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(item.link_imgfb)" />
                                             <img *ngIf="!item.link_imgfb" src="assets/img/imagennodisponible.jpg" />
-                                            <!-- <ion-img *ngIf="item.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(item.link_imgfb)"></ion-img>
-                                                        <ion-img *ngIf="!item.link_imgfb" src="assets/img/logoempre.jpg"></ion-img> -->
                                         </a>
                                     </div>
                                 </ion-col>
@@ -444,19 +353,13 @@
                 <div *ngIf="_parEmpre.usuario.cap_pedido" class="bg-white pedido-padding">
                     <ion-text color="primary">
                         <h6>
-                            <ion-icon size="small" color="dark" name="cart"></ion-icon> {{_cliente.clienteActual.cliente}}</h6>
+                            <ion-icon size="small" color="dark" name="cart"></ion-icon> {{clienteAct.cliente}}</h6>
                     </ion-text>
                     <hr class="bg-tertiary">
-                    <!-- <ion-toolbar> -->
                     <ion-searchbar class="margin-top" [(ngModel)]="buscar_itemped" (ionInput)="buscar_productosped($event)" placeholder="Buscar producto"></ion-searchbar>
                     <div *ngIf="searchingped" class="spinner-container">
                         <ion-spinner></ion-spinner>
                     </div>
-                    <!-- </ion-toolbar> -->
-                    <!-- <ion-card-header>
-                            <ion-card-subtitle>Inventario Disponible:{{_parEmpre.usuario.bod_pedido}} </ion-card-subtitle>
-                        </ion-card-header> -->
-                    <!-- <div> -->
                     <ion-card no-margin margin-vertical class="bg-white margin-top margin-bottom" *ngFor="let item of productos_busped">
                         <ion-grid>
                             <ion-row>
@@ -487,7 +390,6 @@
                         </ion-grid>
                         <hr class="bg-tertiary">
                     </ion-card>
-                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -495,54 +397,3 @@
     </div>
 
 </ion-content>
-
-<!-- <ion-tabs>
-        <ion-tab label="Music" icon="musical-note"></ion-tab>
-        <ion-tab label="Profile" icon="home"></ion-tab>
-        <ion-tab label="people" icon="people"></ion-tab>
-    </ion-tabs> -->
-
-<!-- <ion-footer class="animated fadeIn">
-        <ion-toolbar color="primary">
-    
-            <ion-grid no-padding>
-                <ion-row>
-                    <ion-col size="4" no-padding>
-    
-                        <ion-button size="small" shape="round" expand="full" fill="clear" color="tertiary" routerLink="/home">
-                            <ion-icon slot="home" name="list"></ion-icon>
-                            Home
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-toolbar>
-    </ion-footer> -->
-
-<!-- Anterior 
-    <ion-footer class="animated fadeIn">
-            <ion-toolbar color="primary">
-                <ion-grid no-padding>
-                    <ion-row>
-                        <ion-col size="4" no-padding>
-                            <ion-button size="small" shape="round" expand="full" fill="clear" color="tertiary" (click)="favorite(visita)">
-                                <ion-icon slot="start" name="heart"></ion-icon>
-                                Factura
-                            </ion-button>
-                        </ion-col>
-                        <ion-col size="4" no-padding>
-                            <ion-button size="small" shape="round" expand="full" fill="clear" color="tertiary" href="tel:+13174562564">
-                                <ion-icon slot="start" name="call"></ion-icon>
-                                {{ 'app.button.callus' | translate }}
-                            </ion-button>
-                        </ion-col>
-                        <ion-col size="4" no-padding>
-                            <ion-button size="small" shape="round" expand="full" fill="clear" color="light" (click)="share()">
-                                <ion-icon slot="start" name="share"></ion-icon>
-                                {{ 'app.button.share' | translate }}
-                            </ion-button>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-toolbar>
-        </ion-footer> -->

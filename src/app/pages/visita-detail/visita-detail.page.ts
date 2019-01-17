@@ -44,6 +44,8 @@ export class VisitaDetailPage implements OnInit {
   visita: any;
   visitaID: any = this.route.snapshot.paramMap.get('id'); 
   visitaAct: any;
+  clienteAct: any;
+  ubicaAct: any;
   agmStyles: any[] = environment.agmStyles;
   visitaSegment: string = 'details';
   estadoVisita: string = '';
@@ -60,9 +62,12 @@ export class VisitaDetailPage implements OnInit {
   // linkimgprod: string;
   coords: any = { lat: 0, lng: 0 };
   cargoVisitaActual = false;
+  cargo_ubicaact = false;
+  cargo_clienteact = false;
   listaactividades: any;
   imagenPreview: string;
   listafotos: any;
+  cargo_posicion = false;
 
   constructor(
     public _parEmpre: ParEmpreService,
@@ -86,50 +91,88 @@ export class VisitaDetailPage implements OnInit {
   ) {   
     platform.ready().then(() => {
       // La plataforma esta lista y ya tenemos acceso a los plugins.
+      this.cargo_posicion = false;
+      console.log('platfom lista');
       this.obtenerPosicion();
             // Write a string
-            console.log('envando a pruba impresora');
-            this.impresora.write('Hola mundo').then(() => {} );
+            // console.log('envando a pruba impresora');
+            // this.impresora.write('Hola mundo').then(() => {} );
           });
     console.log('constructor detalle visita');
     console.log(this.visitaID);
     this.visita = this._visitas.getItem(this.visitaID);
-    console.log('constructor detalle visita 2');
-    // this._visitas.inicializarVisitaActual(this.visitaID);
-    console.log('constructor detalle visita 3');
-    this._visitas.getVisitaActual(this.visitaID).subscribe((datos: any) => {
-      console.log('constructor detalle visita getVisitaActual datos:', datos);                
-      this.visitaAct = datos;
-      this.cargoVisitaActual = true;
-      console.log('constructor detalle visita 4 this.visitaAct: ', this.visitaAct);
-      this._actividad.getActividadesVisitaActual(this.visitaAct).subscribe((datosa: any) => {
-        console.log('actividades de la visita: ', datosa);
-        this.listaactividades = datosa;
-        // console.log(this.listaactividades.id);
-        // console.log(this.listaactividades.payload.doc);
-        // console.log(this.listaactividades.payload.doc.data());
-        // console.log(this.listaactividades.payload.doc.id);
-
-      });
-      this._actividad.getFotosVisitaActual(this.visitaAct).subscribe((datosa: any) => {
-        console.log('Fotos de la visita: ', datosa);
-        this.listafotos = datosa;
-        // console.log(this.listaactividades.id);
-        // console.log(this.listaactividades.payload.doc);
-        // console.log(this.listaactividades.payload.doc.data());
-        // console.log(this.listaactividades.payload.doc.id);
-
-      });
-
-
-      // if (datos) {
-      //   console.log('constructor detalle visita getVisitaActual datos true:', datos);                
-      //     this.visitaAct = datos;
-      // } else {
-      //   console.log('constructor detalle visita getVisitaActual datos false:', datos);                
-      //   this.visitaAct = null;
-      // }
+    console.log('constructor detalle visita 2 this.visita:', this.visita);    
+    this.cargo_clienteact = false;
+    this.cargo_clienteact = false;
+    this.cargo_ubicaact = false;
+    this._visitas.actualizarclientenetsolinFb(this.visita.data.cod_tercer).then(result =>{
+      console.log('Actualizar cliente netsolin result:', result);
+      if (result){
+        //Suscribirse a cliente actual fb
+        this._cliente.getClienteFb(this.visita.data.cod_tercer).subscribe((datos: any) => {
+            console.log('Suscribe a clientes fb ', datos);
+            this.clienteAct = datos;
+            this.cargo_clienteact = true;
+            //encontrar ubicacion actual en arreglo
+            this.ubicaAct = null;
+            this.cargo_ubicaact = false;
+            console.log('a buscar ubica act ',this.visita.data.cod_tercer, this.visita.data.id_dir);
+            for (var i = 0; i < this.clienteAct.direcciones.length; i++) {
+              if (this.clienteAct.direcciones[i].id_dir === this.visita.data.id_dir) {
+                this.ubicaAct = this.clienteAct.direcciones[i];
+                this._visitas.direc_actual =this.ubicaAct;
+                console.log('encontro ubica act; ', this.ubicaAct);
+                this.cargo_ubicaact = true;
+              }
+            }
+          });
+        // //Suscribirse a direccion actual fb
+        // this._cliente.getUbicaActFb(this.visita.data.cod_tercer, this.visita.data.id_dir).subscribe((datos: any) => {
+        //   console.log('Suscribe a ubicacion actual fb ', datos);
+        //   if (datos){
+        //     this.ubicaAct = datos;
+        //     this.cargo_ubicaact = true;
+        //   }
+        // });
+      this._visitas.getVisitaActual(this.visitaID).subscribe((datos: any) => {
+          console.log('constructor detalle visita getVisitaActual datos:', datos);                
+          this.visitaAct = datos;
+          this._visitas.visita_activa_copvdet = datos;
+          this.cargoVisitaActual = true;
+          console.log('constructor detalle visita 4 this.visitaAct: ', this.visitaAct);
+          this._actividad.getActividadesVisitaActual(this.visitaAct).subscribe((datosa: any) => {
+            console.log('actividades de la visita: ', datosa);
+            this.listaactividades = datosa;
+            // console.log(this.listaactividades.id);
+            // console.log(this.listaactividades.payload.doc);
+            // console.log(this.listaactividades.payload.doc.data());
+            // console.log(this.listaactividades.payload.doc.id);
+          });
+          this._actividad.getFotosVisitaActual(this.visitaAct).subscribe((datosa: any) => {
+            console.log('Fotos de la visita: ', datosa);
+            this.listafotos = datosa;
+            // console.log(this.listaactividades.id);
+            // console.log(this.listaactividades.payload.doc);
+            // console.log(this.listaactividades.payload.doc.data());
+            // console.log(this.listaactividades.payload.doc.id);
+          });
+        });
+      }
+    })
+    .catch(error => {
+      console.log('Error al actualizarclientenetsolinFb error.message:', error);
     });
+    console.log('constructor detalle visita 3');
+
+
+  //     // if (datos) {
+  //     //   console.log('constructor detalle visita getVisitaActual datos true:', datos);                
+  //     //     this.visitaAct = datos;
+  //     // } else {
+  //     //   console.log('constructor detalle visita getVisitaActual datos false:', datos);                
+  //     //   this.visitaAct = null;
+  //     // }
+  //   });
   }
 
   ngOnInit() {
@@ -138,35 +181,31 @@ export class VisitaDetailPage implements OnInit {
     this._prods.cargar_storage_factura(this.visita.data.id_ruta, this.visita.id);
     this._prods.cargar_storage_pedido(this.visita.data.id_ruta, this.visita.id);
     this._recibos.cargar_storage_recibo(this.visita.data.id_ruta, this.visita.id);
-    // this._visitas.traerimagenducha();
-    
-    // this._visitas.traerlinkimgProd().subscribe((datos: any) => {
-    //   console.log('traerimagenducha datos:', datos);    
-    //   this.imagenmuest = datos;   
-    //   this.linkimgprod = datos;  
-    //   // this.imagensanit = this._DomSanitizer.bypassSecurityTrustUrl(this.imagenmuest);
-    //   // this.visitaAct = datos;
-    //   // console.log('constructor detalle visita 4 this.visitaAct: ', this.visitaAct);
-    // });
   }
 
   obtenerPosicion(): any {
+    console.log('en obtener posicion', this.coords);
     this.geolocation
       .getCurrentPosition()
       .then(res => {
         this.coords.lat = res.coords.latitude;
         this.coords.lng = res.coords.longitude;
+        this.cargo_posicion = true;
+        console.log('res ok obtener posicion', this.coords);
         // this.loadMap();
       })
       .catch(error => {
         console.log(error.message);
         this.coords.lat = 4.625749001284896;
         this.coords.lng = -74.078441;
+        this.cargo_posicion = true;
+        console.log('res error obtener posicion', this.coords);
         // this.loadMap();
       });
   }
 
   async actualizarCliente() {
+    console.log('a actualizar cliente modal coords:', this.coords);
     const modal = await this.modalCtrl.create({
       component: ModalActClientePage,
       // componentProps: { fromto: fromto, search: this.search }
@@ -186,11 +225,21 @@ export class VisitaDetailPage implements OnInit {
 
 
   registrarIngresoVisita() {
-    // this.estadoVisita = 'A';
-    // this._visitas.visita_activa.estado = 'A';
     const datactvisita = {
       fechahora_ingreso : Date(),
-      estado : 'A'
+      estado : 'A',
+      grb_pedido : false,
+      resgrb_pedido : '',
+      pedido_grabado : null,
+      errorgrb_pedido : false,
+      grb_factu : false,
+      resgrb_factu : '',
+      pedido_factu : null,
+      errorgrb_factu : false,
+      grb_recibo : false,
+      resgrb_recibo : '',
+      pedido_recibo : null,
+      errorgrb_recibo : false
     };
     this._visitas.actualizarVisita(this.visitaID, datactvisita);
   }
@@ -281,7 +330,7 @@ export class VisitaDetailPage implements OnInit {
         console.log('en mostrar camara2 imageData:',imageData);
         this.imagenPreview = `data:image/jpeg;base64,${imageData}`; 
         console.log('this.imagenPreview:', this.imagenPreview);
-        this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa.datosgen.cod_tercer, 
+        this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
           this.visitaID, imageData);
        }, (err) => {
         // Handle error

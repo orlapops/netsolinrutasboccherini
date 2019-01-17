@@ -20,3 +20,20 @@ ion-prod {
     line-height: 1px;
     justify-content: center;
 }
+
+.btpedido-color {
+    color: #222428;
+    background-color: #e2decb;
+    --btn-background: #e2decb;
+    --btn-border-color: var(--border-color-checked);
+}
+
+.counter-position {
+    position: relative;
+    left: 40px;
+}
+
+.add-button {
+    position: relative;
+    right: -30px;
+}

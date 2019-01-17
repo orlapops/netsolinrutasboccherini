@@ -44,7 +44,7 @@ export class ClienteProvider {
             console.log('en constructor cliente ', this.clienteActual);
     }
     //guarda o actualiza el cliente actual en coleccion clientes de firestore
-    public guardarCliente(id){
+    public guardarClienteFb(id){
         console.log('guardarCliente id:' + id);
         console.log(this.clienteActual);
       return this.fbDb.collection('clientes').doc(id).set(this.clienteActual);
@@ -58,6 +58,11 @@ export class ClienteProvider {
     return this.fbDb.collection(`clientes/${idclie}/direcciones`).doc(id_direc).valueChanges();
   }
   
+  public getClienteFb(idclie){
+    console.log('getClienteFb idclie:' + idclie);    
+    return this.fbDb.collection(`clientes`).doc(idclie).valueChanges();
+  }
+
     public guardardireccionesCliente(id){
       console.log('guardardireccionesCliente id:' + id);
       console.log(this.direcciones);

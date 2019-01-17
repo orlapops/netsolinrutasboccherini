@@ -66,5 +66,12 @@ export class ProdDetailPedPage implements OnInit {
         toast.present();
       });
   }
-
+  incrementar_cantidad() {
+    this.cantidad_sol = this.cantidad_sol + 1;
+    this.total();
+  }
+  decrentar_cantidad() {
+    this.cantidad_sol = this.cantidad_sol - 1;
+    this.total();
+  }
 }

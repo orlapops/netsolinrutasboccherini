@@ -66,7 +66,7 @@ export class ActividadesService implements OnInit {
     console.log('en getIdRegActividad');
   return this.fbDb
     .collection(`/personal/${this._parempre.usuario.cod_usuar}/
-    rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.id_visita_activa}/actividades`)
+    rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
    .doc(Id).valueChanges();
   }
 
@@ -105,19 +105,19 @@ export class ActividadesService implements OnInit {
   public grabarActividad(objact) {
     console.log('en grabar actividad coleccion: ',
     `/personal/${this._parempre.usuario.cod_usuar}
-    /rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.id_visita_activa}/actividades`);
+    /rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`);
     return this.fbDb
     // tslint:disable-next-line:max-line-length
-    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.id_visita_activa}/actividades`)
+    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
     .add(objact);
   }
   public modificarActividad(id, objact) {
     console.log('en grabar actividad coleccion: ',
     `/personal/${this._parempre.usuario.cod_usuar}
-    /rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.id_visita_activa}/actividades`);
+    /rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`);
     return this.fbDb
     // tslint:disable-next-line:max-line-length
-    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.id_visita_activa}/actividades`)
+    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
     .doc(id).set(objact);
   }
   

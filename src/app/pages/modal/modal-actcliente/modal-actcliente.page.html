@@ -39,7 +39,7 @@
                 <agm-marker [latitude]="coords.lat" [longitude]="coords.lng"></agm-marker>
             </agm-map>
         </ion-card-content>
-        <ion-button icon-left size="small" shape="round" color="tertiary" (click)="actualiza_ubicaciongps()">
+        <ion-button *ngIf="cargo_posicion" icon-left size="small" shape="round" color="tertiary" (click)="actualiza_ubicaciongps()">
             Actualizar Ubicación
             <ion-icon name="pin"></ion-icon>
         </ion-button>

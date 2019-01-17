@@ -1,5 +1,22 @@
 :host {
-  ion-content {
-    --background: linear-gradient(-135deg, var(--ion-color-medium), var(--ion-color-light))
-  }
+    ion-content {
+        --background: linear-gradient(-135deg, var(--ion-color-medium), var(--ion-color-light))
+    }
+}
+
+.btcartera-color {
+    color: #222428;
+    background-color: #c5d9fa;
+    --btn-background: #c5d9fa;
+    --btn-border-color: var(--border-color-checked);
+}
+
+.delete-position {
+    position: relative;
+    right: -90px;
+}
+
+.saldo-position {
+    position: relative;
+    top: -16px;
 }

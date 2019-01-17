@@ -9,7 +9,7 @@
     </ion-toolbar>
 </ion-header>
 
-
+<!-- 
 <ion-content class="animated fadeIn">
     <ion-card no-margin class="animated fadeIn">
         <ion-card-content class="bg-white">
@@ -66,6 +66,75 @@
                 Agregar
             </ion-button>
 
+        </ion-toolbar>
+    </ion-footer>
+
+</ion-content> -->
+<ion-content class="animated fadeIn">
+    <ion-card no-margin class="animated fadeIn">
+        <ion-card-content class="bg-white">
+            <h3>
+                <ion-text>
+                    Cliente: {{ _cliente.clienteActual.cliente }}
+                </ion-text>
+            </h3>
+            <h3>
+                <ion-text>
+                    Obligación: {{ oblshop.num_obliga }} Fecha: {{ oblshop.fecha_obl | date }}
+                </ion-text>
+            </h3>
+        </ion-card-content>
+        <ion-item class="bg-white">
+            <p slot="start">
+                Saldo:
+            </p>
+            <ion-badge slot="start" color="warning">
+                {{oblshop.saldo | currency }}
+            </ion-badge>
+            <ion-badge slot="end" color="danger">
+                {{oblshop.dias_venci }} Días Vencido
+            </ion-badge>
+
+        </ion-item>
+        <ion-item class="bg-white">
+            <p>
+                Abono:
+            </p>
+            <ion-badge slot="end" color="warning">
+                {{valor_abono | currency }}
+            </ion-badge>
+        </ion-item>
+        <ion-item class="bg-white">
+            <ion-label>
+                Nuevo Saldo:
+            </ion-label>
+            <ion-badge slot="end" color="success">
+                {{oblshop.saldo - valor_abono | currency }}
+            </ion-badge>
+
+        </ion-item>
+
+    </ion-card>
+    <ion-footer>
+        <ion-toolbar>
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="3">
+                        <ion-label>
+                            Abonar:
+                        </ion-label>
+                    </ion-col>
+                    <ion-col size="4">
+                        <ion-input (ionChange)="total()" [(ngModel)]="valor_abono" type="number" min="1" max="99999999" step="10000" placeholder="Valor a Abonar" clearOnEdit="true">
+                        </ion-input>
+                    </ion-col>
+                    <ion-col size="5">
+                        <ion-button shape="round" color="success" (click)="addrecibo(oblshop, valor_abono)">
+                            Agregar
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
         </ion-toolbar>
     </ion-footer>
 
