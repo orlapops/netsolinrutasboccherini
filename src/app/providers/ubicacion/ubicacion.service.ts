@@ -53,7 +53,8 @@ export class UbicacionProvider {
                   const now = new Date();
                   //extraemos el día mes y año 
                   const dia = now.getDate();
-                  const mes = parseInt(now.getMonth()) + 1;
+                  // const mes = parseInt(now.getMonth()) + 1;
+                  const mes = now.getMonth() + 1;
                   const ano = now.getFullYear();
                   const hora = now.getHours();
                   const minutos = now.getMinutes();
