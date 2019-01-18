@@ -116,7 +116,6 @@ export class ModalActClientePage implements OnInit {
       console.log('en mostrar camara2 imageData:',imageData);
       this.imagenPreview = `data:image/jpeg;base64,${imageData}`; 
       console.log('this.imagenPreview:', this.imagenPreview);
-      // this._visitas.cargar_imagenb_firebase('1' , this.imagenPreview);
       this._clientes.actualizaimagenClientefirebase(this._visitas.visita_activa_copvdet.cod_tercer,
         this._visitas.visita_activa_copvdet.id_dir,
         imageData);

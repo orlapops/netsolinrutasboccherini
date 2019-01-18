@@ -109,7 +109,7 @@
             "cordova-plugin-network-information": {},
             "cordova-plugin-firebase": {},
             "cordova-plugin-ionic": {
-                "APP_ID": "8103196d",
+                "APP_ID": "f96dd34a",
                 "CHANNEL_NAME": "Master",
                 "UPDATE_METHOD": "background",
                 "MAX_STORE": "3",

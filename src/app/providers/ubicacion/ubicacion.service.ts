@@ -10,7 +10,8 @@ export class UbicacionProvider {
 
   usuario: AngularFirestoreDocument<any>;
   private watch: Subscription;
-
+  lastUpdateTime = null;
+  minFrequency = 60 * 5 * 1000 ;
 
   constructor( private afDB: AngularFirestore,
                private geolocation: Geolocation,
@@ -48,6 +49,19 @@ export class UbicacionProvider {
                     latitud: data.coords.latitude,
                     longitud: data.coords.longitude
                   });
+                  //Actualizar recorrido si han pasado 5 minutos
+                  // const now = new Date();
+                  // if(this.lastUpdateTime && now.getTime() - this.lastUpdateTime.getTime() > this.minFrequency){
+                  //     console.log("Actualizar recorrido");
+                  //     this.lastUpdateTime = new Date();
+                  //     const lfechahora = now.toLocaleString();
+                  //     const lif = lfechahora.replace('/' , '_');
+                  //     const usuariorecorrido = this.afDB.collection(`/personal/`).doc(this._parEmpre.usuario.cod_usuar);
+                  //     this.usuario.update({
+                  //       latitud: data.coords.latitude,
+                  //       longitud: data.coords.longitude
+                  //     });
+                  // }
           
 
           console.log( this.usuario );
