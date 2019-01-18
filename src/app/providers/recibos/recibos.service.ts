@@ -181,8 +181,10 @@ export class RecibosService implements OnInit {
     return Promise.resolve();
   }
   public guardar_storage_recibo() {
-    let idruta = this._visitas.visita_activa.datosgen.id_ruta;
-    let idvisiact = this._visitas.visita_activa.datosgen.id_visita;
+    // let idruta = this._visitas.visita_activa.datosgen.id_ruta;
+    // let idvisiact = this._visitas.visita_activa.datosgen.id_visita;
+    const idruta = this._visitas.visita_activa_copvdet.id_ruta;
+    const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
     let idirecibo = idruta.toString() + idvisiact.toString();
     if (this.platform.is("cordova")) {
       // dispositivo

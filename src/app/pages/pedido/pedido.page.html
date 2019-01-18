@@ -9,6 +9,12 @@
 </ion-header>
 
 <ion-content class="animated fadeIn">
+    <ion-text color="primary">
+        <h6>
+            <ion-icon size="small" color="dark" name="cart"></ion-icon>{{_cliente.clienteActual.cliente}}</h6>
+    </ion-text>
+    <hr class="bg-tertiary">
+
     <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
         Imprimir Pedido
     </ion-button>

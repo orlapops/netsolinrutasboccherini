@@ -3,11 +3,19 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Items Recibo de Caja</ion-title>
+        <!-- <ion-title>Items Recibo de Caja</ion-title> -->
+        <ion-title class="headercliente">Items Recibo de Caja</ion-title>
+        <ion-title class="headercliente">{{_cliente.clienteActual.cliente}}</ion-title>
+
     </ion-toolbar>
 </ion-header>
 
 <ion-content class="animated fadeIn">
+    <ion-text color="primary">
+        <h6>
+            <ion-icon size="small" color="dark" name="bookmark"></ion-icon>{{_cliente.clienteActual.cliente}}</h6>
+    </ion-text>
+    <hr class="bg-tertiary">
     <ion-grid>
         <ion-row>
             <ion-col size="12" margin-bottom>
