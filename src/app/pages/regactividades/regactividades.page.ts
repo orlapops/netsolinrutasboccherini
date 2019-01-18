@@ -71,7 +71,14 @@ export class RegActividadesPage implements OnInit {
       notas: this.notaAct
     }
     console.log('grabarActividad activigrab:', activigrab);
-    this._actividad.grabarActividad(activigrab).then(res => {
+    this._actividad.grabarActividad(activigrab).then(async res => {
+      const toast = await this.toastCtrl.create({
+        showCloseButton: true,
+        message: 'Se adiciono actividad.',
+        duration: 2000,
+        position: 'bottom'
+      });
+      toast.present();
       console.log('Actividad guardada res: ', res);
       console.log('Actividad guardada res id: ', res.id);
   });
@@ -87,9 +94,16 @@ export class RegActividadesPage implements OnInit {
       notas: this.notaAct
     }
     console.log('modificarActividad activigrab:', activigrab);
-    this._actividad.modificarActividad(this.idact, activigrab).then(res => {
+    this._actividad.modificarActividad(this.idact, activigrab).then(async res => {
       console.log('Actividad modificada res: ', res);
-      // console.log('Actividad guardada res id: ', res.id);
+      const toast = await this.toastCtrl.create({
+        showCloseButton: true,
+        message: 'Se modifo la actividad.',
+        duration: 2000,
+        position: 'bottom'
+      });
+      toast.present();
+// console.log('Actividad guardada res id: ', res.id);
   });
   }  
 }

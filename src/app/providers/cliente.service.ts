@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NavController, ToastController } from '@ionic/angular';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { ParEmpreService } from '../providers/par-empre.service';
 import { NetsolinApp } from '../shared/global';
@@ -37,6 +38,8 @@ export class ClienteProvider {
     public dclienteFb: any;
     
     constructor(private fbDb: AngularFirestore,
+        public navCtrl: NavController,
+        public toastCtrl: ToastController,
         private http: HttpClient,
         private afStorage: AngularFireStorage,
         // public _message: MessageService,
@@ -176,7 +179,7 @@ export class ClienteProvider {
       .then(() => {
         // this._parempre.reg_log('a actualizar img fb clie 2 then: ' , idclie);
         console.log('a a ctualizar foto cliente ', idclie);          
-        return storageRef.getDownloadURL().subscribe((linkref: any) => {
+        return storageRef.getDownloadURL().subscribe(async (linkref: any) => {
           // this._parempre.reg_log('a actualizar img fb linkref: ' , linkref);
           console.log(linkref);
             let id_direc = iddirec.toString();
@@ -184,6 +187,13 @@ export class ClienteProvider {
             // this._parempre.reg_log('a actualizar img fb id_direc: ' , id_direc);
             this.actualizaimagenDirclienteNetsolin(idclie, iddirec, 0, 0, linkref);
             this.fbDb.collection(`/clientes/${idclie}/direcciones/`).doc(id_direc).update({link_foto: linkref});
+            const toast = await this.toastCtrl.create({
+              showCloseButton: true,
+              message: 'Se actualizo la foto del cliente.',
+              duration: 2000,
+              position: 'bottom'
+            });
+            toast.present();
         }); 
     })
     .catch((error) => {
