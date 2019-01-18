@@ -4,7 +4,6 @@ import { TranslateProvider } from '../../providers';
 import { VisitasProvider } from '../../providers/visitas/visitas.service';
 import { ParEmpreService } from '../../providers/par-empre.service';
 import { RecibosService } from '../../providers/recibos/recibos.service';
-import { ClienteProvider } from 'src/app/providers/cliente.service';
 
 @Component({
   selector: 'app-recibocaja',
@@ -20,7 +19,6 @@ export class RecibocajaPage implements OnInit {
     public navCtrl: NavController,
     private translate: TranslateProvider,
     public _visitas: VisitasProvider,
-    public _cliente: ClienteProvider,
     public _recibos: RecibosService,
   ) { }
 
