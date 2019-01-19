@@ -42,6 +42,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ModalActClientePageModule } from './pages/modal/modal-actcliente/modal-actcliente.module';
 import { UbicacionProvider } from './providers/ubicacion/ubicacion.service';
 import { ActividadesService } from './providers/actividades/actividades.service';
+import { MessageService } from './providers/message/message.service';
 // import { ModalActClientePageModule } from './pages/modal/modal-actcliente/modal-actcliente';
 // import { VisitanService } from './providers/visitan.service';
 // import { Network } from '@ionic-native/network';
@@ -103,6 +104,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     VisitasProvider,
     UbicacionProvider,
     ActividadesService,
+    MessageService,
     // VisitanService,
     ClienteProvider,
     CarritoFacturaService,

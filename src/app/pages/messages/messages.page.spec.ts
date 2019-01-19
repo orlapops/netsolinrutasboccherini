@@ -24,4 +24,6 @@ describe('MessagesPage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });
+
