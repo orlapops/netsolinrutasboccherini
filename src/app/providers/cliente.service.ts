@@ -42,10 +42,11 @@ export class ClienteProvider {
         public toastCtrl: ToastController,
         private http: HttpClient,
         private afStorage: AngularFireStorage,
-        // public _message: MessageService,
         public _parempre: ParEmpreService) {
             console.log('en constructor cliente ', this.clienteActual);
     }
+    
+
     //guarda o actualiza el cliente actual en coleccion clientes de firestore
     public guardarClienteFb(id){
         console.log('guardarCliente id:' + id);

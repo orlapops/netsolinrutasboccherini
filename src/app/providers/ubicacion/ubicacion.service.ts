@@ -12,6 +12,8 @@ export class UbicacionProvider {
   private watch: Subscription;
   lastUpdateTime = null;
   minFrequency = 60 * 5 * 1000 ;
+  ultlatitud = 0;
+  ultlongitud = 0;
 
   constructor( private afDB: AngularFirestore,
                private geolocation: Geolocation,
@@ -49,6 +51,8 @@ export class UbicacionProvider {
                     latitud: data.coords.latitude,
                     longitud: data.coords.longitude
                   });
+                  this.ultlatitud = data.coords.latitude;
+                  this.ultlongitud = data.coords.longitude;
                   //Actualizar recorrido si han pasado 5 minutos
                   const now = new Date();
                   //extraemos el día mes y año 

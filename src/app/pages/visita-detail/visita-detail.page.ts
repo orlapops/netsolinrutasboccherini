@@ -151,9 +151,10 @@ export class VisitaDetailPage implements OnInit {
             // console.log(this.listaactividades.payload.doc.data());
             // console.log(this.listaactividades.payload.doc.id);
           });
-          this._actividad.getFotosVisitaActual(this.visitaAct).subscribe((datosa: any) => {
-            console.log('Fotos de la visita: ', datosa);
-            this.listafotos = datosa;
+          this._actividad.getFotosVisitaActual(this.visitaAct).subscribe((datosf: any) => {
+            console.log('Fotos de la visita: ', datosf);
+            this.listafotos = datosf;
+            console.log('Fotos de la visita listafotos: ', this.listafotos);
             // console.log(this.listaactividades.id);
             // console.log(this.listaactividades.payload.doc);
             // console.log(this.listaactividades.payload.doc.data());

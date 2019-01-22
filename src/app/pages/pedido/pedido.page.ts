@@ -18,6 +18,8 @@ export class PedidoPage implements OnInit {
   pedido: Array<any> = [];
   total_ped = 0;
   grabando_pedido = false;
+  grabo_pedido = false;
+  mostrandoresulado = false;
   constructor(
     public navCtrl: NavController,
     public btCtrl: BluetoothSerial,
@@ -74,14 +76,34 @@ export class PedidoPage implements OnInit {
     this.grabando_pedido = true;
     this._prods.genera_pedido_netsolin()
     .then(res => {
-      this.grabando_pedido = false;
-      console.log('retorna genera_pedido_netsolin res:', res);
+      if (res){
+        this.mostrandoresulado = true;
+        this.grabo_pedido = true;
+        console.log('retorna genera_pedido_netsolin res:', res);
+      } else {
+        this.mostrandoresulado = true;
+        this.grabo_pedido = false;
+        this.grabando_pedido = true;
+        console.log('retorna genera_pedido_netsolin error.message: ');  
+      }
     })
     .catch(error => {
-      this.grabando_pedido = false;
+      this.mostrandoresulado = true;
+      this.grabo_pedido = false;
+      this.grabando_pedido = true;
       console.log('retorna genera_pedido_netsolin error.message: ', error.message);
     });
   }
+  quitar_resuladograboped(){
+    if (this.grabo_pedido){
+      this.pedido = [];
+      this.grabo_pedido = false;
+      this._prods.borrar_storage_pedido();
+    }
+    this.grabando_pedido = false;
+    this.mostrandoresulado = false;    
+  }
+
   imprimir_pedido() {
     let printer;
     this.btCtrl.list().then(async datalist => {
@@ -119,7 +141,7 @@ export class PedidoPage implements OnInit {
                 }, async err => {
                    const alerter = await this.alertCtrl.create({
                     message: 'ERROR' + err,
-                    buttons: ['Cancel']
+                    buttons: ['Cancelar']
                   });
                    await alerter.present();
                 });
@@ -130,10 +152,10 @@ export class PedidoPage implements OnInit {
       });
        await alert.present();
     }, async err => {
-      console.log('Not able to connect', err);
+      console.log('No se pudo conectar', err);
        const alert = await this.alertCtrl.create({
         message: 'ERROR' + err,
-        buttons: ['Cancel']
+        buttons: ['Cancelar']
       });
        await alert.present();
     });

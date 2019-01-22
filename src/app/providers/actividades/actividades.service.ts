@@ -66,7 +66,7 @@ export class ActividadesService implements OnInit {
     console.log('en getIdRegActividad');
   return this.fbDb
     .collection(`/personal/${this._parempre.usuario.cod_usuar}/
-    rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
+    rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
    .doc(Id).valueChanges();
   }
 
@@ -104,29 +104,29 @@ export class ActividadesService implements OnInit {
   public grabarActividad(objact) {
     console.log('en grabar actividad coleccion: ',
     `/personal/${this._parempre.usuario.cod_usuar}
-    /rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`);
+    /rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`);
     return this.fbDb
     // tslint:disable-next-line:max-line-length
-    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
+    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
     .add(objact);
   }
   public modificarActividad(id, objact) {
     console.log('en grabar actividad coleccion: ',
     `/personal/${this._parempre.usuario.cod_usuar}
-    /rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`);
+    /rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`);
     return this.fbDb
     // tslint:disable-next-line:max-line-length
-    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
+    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/actividades`)
     .doc(id).set(objact);
   }
   
  //Obtiene actividades de la visita actual
  public getActividadesVisitaActual(ObjVisitaAct) {
   // tslint:disable-next-line:max-line-length
-  console.log('getActividadesVisitaActual:', `/personal/${this._parempre.usuario.cod_usuar}/rutas/${ObjVisitaAct.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${ObjVisitaAct.id_visita}/actividades`);
+  console.log('getActividadesVisitaActual:', `/personal/${this._parempre.usuario.cod_usuar}/rutas/${ObjVisitaAct.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${ObjVisitaAct.id_visita}/actividades`);
   return this.fbDb
   // tslint:disable-next-line:max-line-length
-  .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${ObjVisitaAct.id_visita}/actividades`)
+  .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${ObjVisitaAct.id_visita}/actividades`)
   .snapshotChanges().pipe(
     map(actions => actions.map(a => {
       const data = a.payload.doc.data();
@@ -140,10 +140,10 @@ export class ActividadesService implements OnInit {
  //Obtiene actividades de la visita actual
  public getFotosVisitaActual(ObjVisitaAct) {
   // tslint:disable-next-line:max-line-length
-  console.log('getFotosVisitaActual:', `/personal/${this._parempre.usuario.cod_usuar}/rutas/${ObjVisitaAct.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${ObjVisitaAct.id_visita}/fotos`);
+  console.log('getFotosVisitaActual:', `/personal/${this._parempre.usuario.cod_usuar}/rutas/${ObjVisitaAct.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${ObjVisitaAct.id_visita}/fotos`);
   return this.fbDb
   // tslint:disable-next-line:max-line-length
-  .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${ObjVisitaAct.id_visita}/fotos`)
+  .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${ObjVisitaAct.id_visita}/fotos`)
   .snapshotChanges().pipe(
     map(actions => actions.map(a => {
       const data = a.payload.doc.data();
@@ -165,10 +165,10 @@ actualizafotosVisitafirebase(idclie, idvisita, imageURL): Promise<any> {
       return storageRef.getDownloadURL().subscribe((linkref: any) => {
           console.log(linkref);
           console.log(`/personal/${this._parempre.usuario.cod_usuar}/rutas/
-          ${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${idvisita}/fotos`);
+          ${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${idvisita}/fotos`);
           this.fbDb
           // tslint:disable-next-line:max-line-length
-          .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.visita_activa_copvdet.id_periodo}/visitas/${idvisita}/fotos`)
+          .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${idvisita}/fotos`)
           .add({link_foto: linkref});
       }); 
   });

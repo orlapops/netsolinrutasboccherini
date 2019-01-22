@@ -31,12 +31,12 @@
     </ion-card>
 </div>
 <ion-content class="animated fadeIn" *ngIf="cargoVisitaActual && cargo_clienteact">
-    <ion-slides pager="true" class="margin-bottom">
+    <!-- <ion-slides pager="true" class="margin-bottom">
         <ion-slide *ngFor="let image of visita.images" (click)="presentImage(image)">
             <img [src]="image">
             <div class="shadow"></div>
         </ion-slide>
-    </ion-slides>
+    </ion-slides> -->
     <div padding-horizontal *ngIf="cargo_clienteact" class="ion-padding">
 
         <ion-segment [(ngModel)]="visitaSegment" class="background-tolbar">
@@ -175,19 +175,18 @@
                         </ion-text>
                         <hr class="bg-tertiary">
                         <ion-slides pager="true" margin-bottom class="slide">
-                            <ion-slide *ngFor="let foto of listafotos | slice:0:4; let i = index">
+                            <ion-slide *ngFor="let foto of listafotos | slice:0:4; let i = index" (click)="presentImage(foto.link_foto)">
                                 <ion-grid no-padding>
                                     <ion-row>
                                         <ion-col size="12">
                                             <ion-card class="actividadesCard">
                                                 <ion-img [src]="foto.link_foto"></ion-img>
-
+                                                <!-- 
                                                 <ion-card-subtitle>
                                                     <ion-badge color="danger" (click)="eliminarFoto(foto)">
                                                         <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
-                                                        <!-- <ion-icon name="crash"></ion-icon> Eliminar -->
                                                     </ion-badge>
-                                                </ion-card-subtitle>
+                                                </ion-card-subtitle> -->
                                             </ion-card>
                                         </ion-col>
                                     </ion-row>
@@ -392,7 +391,19 @@
                 </div>
             </div>
         </div>
-
+        <ion-toolbar color="primary">
+            <ion-tabs>
+                <ion-tab label="Ult. Facturas" icon="paper"></ion-tab>
+                <ion-tab label="Ult.Pedidos" icon="cart" href="/ultpedido"></ion-tab>
+                <ion-tab label="Ult. Recibos" icon="cash"></ion-tab>
+            </ion-tabs>
+        </ion-toolbar>
+        <!-- <div>
+            <ion-tabs>
+                <ion-tab label="Ult. Facturas" icon="paper"></ion-tab>
+                <ion-tab label="Ult.Pedidos" icon="cart"></ion-tab>
+                <ion-tab label="Ult. Recibos" icon="cash"></ion-tab>
+            </ion-tabs>
+        </div> -->
     </div>
-
 </ion-content>

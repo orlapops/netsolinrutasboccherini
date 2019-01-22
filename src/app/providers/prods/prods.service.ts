@@ -46,6 +46,16 @@ export class ProdsService implements OnInit {
     console.log("ngoniit prod service visita");
     console.log(this._visitas);
   }
+
+       //Obtiene ultimos pedidos del  clente de la visita actual
+ public getUltPedidosClienteDirActual() {
+  // tslint:disable-next-line:max-line-length
+  console.log('getUltPedidosClienteDirActual:', `/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/pedidos`);
+    // return this.fbDb.collection('rutas_d', ref => ref.where('id_reffecha', '==', fechaid).orderBy('fecha_in')).valueChanges();
+    return this.fbDb.collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/pedidos`, ref => 
+      ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)).snapshotChanges();
+        // .where('id_ruta','==',idruta).orderBy('fecha_in')).snapshotChanges();
+    }
   // Carga Inventario de la bodega para facturar en Netsolin
   cargaInventarioNetsolin() {
     return new Promise((resolve, reject) => {
@@ -457,6 +467,19 @@ export class ProdsService implements OnInit {
       localStorage.setItem("itemped" + idiped, JSON.stringify(this.pedido));
     }
   }
+  public borrar_storage_pedido() {
+    const idruta = this._visitas.visita_activa_copvdet.id_ruta;
+    const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
+    const idiped = idruta.toString() + idvisiact.toString();
+    this.pedido = [];
+    if (this.platform.is("cordova")) {
+      // dispositivo
+      this.storage.remove("itemped" + idiped);
+    } else {
+      // computadora
+      localStorage.removeItem("itemped" + idiped);
+    }
+  }
 
   cargar_storage_factura(idruta, idvisiact) {
     // console.log("cargar_storage_factura 1", this._visitas);
@@ -491,6 +514,20 @@ export class ProdsService implements OnInit {
       }
     });
     return promesa;
+  }
+
+  public borrar_storage_factura() {
+    const idruta = this._visitas.visita_activa_copvdet.id_ruta;
+    const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
+    let idifact = idruta.toString() + idvisiact;
+    this.factura = [];
+    if (this.platform.is("cordova")) {
+      // dispositivo
+      this.storage.remove("itemfac" + idifact);
+    } else {
+      // computadora
+      localStorage.removeItem("itemfac" + idifact);
+    }
   }
   cargar_storage_pedido(idruta, idvisiact) {
     // console.log("cargar_storage_pedido 1", this._visitas);
@@ -577,16 +614,23 @@ export class ProdsService implements OnInit {
           const objpedidogfb ={
             cod_dpedid : data.cod_dpedidg,
             num_dpedid : data.num_dpedidg,
+            fecha : data.fecha,
+            cod_usuar : this._parempre.usuario.cod_usuar,
+            id_visita : this._visitas.visita_activa_copvdet.id_visita,
+            direccion : this._visitas.visita_activa_copvdet.direccion,
+            id_dir : this._visitas.visita_activa_copvdet.id_dir,
             detalle : data.ped_grabado
           };
-            // this.guardarpedidoFb(data.cod_dpedidg.trim() + data.num_dpedidg.trim(), objpedidogfb).then(res => {
-            //   console.log('Pedido guardada res: ', res);
-            //   console.log('Pedido guardada res id: ', res.id);
-            //   resolve(true);
-            // })
-            // .catch((err) => {
-            //     console.log('Error guardando pedido en Fb', err);
-            // });
+            this.guardarpedidoFb(data.cod_tercer, data.cod_dpedidg.trim() + data.num_dpedidg.trim(), objpedidogfb).then(res => {
+              console.log('Pedido guardada res: ', res);
+              // console.log('Pedido guardada res id: ', res.id);
+              resolve(true);
+            })
+            .catch((err) => {
+                console.log('Error guardando pedido en Fb', err);
+                resolve(false);
+            });
+            // resolve(true);
           }
         }
         console.log(" genera_pedido_netsolin 4");
@@ -594,15 +638,17 @@ export class ProdsService implements OnInit {
     });
   }
     // Actualiza url firestorage en Netsolin, para cuando se traiga sea màs rapido
-    guardarpedidoFb(id, objpedido) {
-      console.log('en guardarpedidoFb: ', id ,
-      `/personal/${this._parempre.usuario.cod_usuar}
-      /rutas/${this._visitas.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.id_visita_activa}/pedidos`, objpedido);
-      return this.fbDb
-      .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.id_ruta}/periodos/
-                  ${this._visitas.id_periodo}/visitas/${this._visitas.id_visita_activa}/pedidos/`)
-      .doc(id).set(objpedido);
-                  // .add(objpedido);      
+    guardarpedidoFb(cod_tercer, id, objpedido) {
+      // console.log('en grabar guardarpedidoFb coleccion: ',`/personal/${this._parempre.usuario.cod_usuar}
+      // /rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}
+      // /visitas/${this._visitas.visita_activa_copvdet.id_visita}/pedidos`);
+      return this.fbDb.collection(`/clientes/${cod_tercer}/pedidos/`).doc(id).set(objpedido);
+      // return this.fbDb
+      // tslint:disable-next-line:max-line-length
+      // .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/pedidos`)
+      // .doc(id).set(objpedido);
+      // .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/pedidos`)
+      // .doc(id).set(objpedido);
     }
 }
 

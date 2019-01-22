@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'visita-nueva', loadChildren: './pages/modal/modal-nueva-visita/modal-nueva-visita.module#ModalNuevaVisitaPageModule'},  
   { path: 'factura', loadChildren: './pages/factura/factura.module#FacturaPageModule' },
   { path: 'pedido', loadChildren: './pages/pedido/pedido.module#PedidoPageModule' },
+  { path: 'ultpedido', loadChildren: './pages/pedido.ult/ultpedido.module#UltPedidoPageModule' },
   { path: 'recibocaja', loadChildren: './pages/recibocaja/recibocaja.module#RecibocajaPageModule' },
   { path: 'recibo-detail/:id', loadChildren: './pages/recibo-detail/recibo-detail.module#ReciboDetailPageModule' },
   { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },
