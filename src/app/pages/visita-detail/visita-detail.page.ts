@@ -346,4 +346,15 @@ export class VisitaDetailPage implements OnInit {
     console.log('En eliminar foto ', ifoto);
 
   }
+  //Actualizar imagenes productos pedido
+  public actimgpedido() {
+      //Actualizar link imagen solo para que actualice en Netsolin el link se comentarea cuando no
+      this._prods.actLinkimgPed();    
+  }
+  //Actualizar imagenes productos factura
+  public actimgfactura() {
+    //Actualizar link imagen solo para que actualice en Netsolin el link se comentarea cuando no
+    this._prods.actLinkimg();    
+}
+
 }

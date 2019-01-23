@@ -305,8 +305,13 @@
                 <div *ngIf="_parEmpre.usuario.cap_factura" class="bg-white facturar-padding">
                     <ion-text color="primary">
                         <h6>
-                            <ion-icon size="small" color="dark" name="paper"></ion-icon> {{clienteAct.cliente}}</h6>
+                            <ion-icon size="small" color="dark" name="paper"></ion-icon> {{clienteAct.cliente}}
+                            <ion-icon slot="end" color="dark" name="arrow-round-down" (click)="actimgfactura()"></ion-icon>
+                        </h6>
                     </ion-text>
+                    <ion-icon slot="end" name="arrow-round-down" (click)="actimgfactura()"></ion-icon>
+                    <!-- </ion-button> -->
+
                     <hr class="bg-tertiary">
                     <ion-searchbar [(ngModel)]="buscar_item" (ionInput)="buscar_productos($event)" placeholder="Buscar Producto"></ion-searchbar>
                     <div *ngIf="searching" class="spinner-container">
@@ -351,8 +356,11 @@
                 <div *ngIf="_parEmpre.usuario.cap_pedido" class="bg-white pedido-padding">
                     <ion-text color="primary">
                         <h6>
-                            <ion-icon size="small" color="dark" name="cart"></ion-icon> {{clienteAct.cliente}}</h6>
+                            <ion-icon size="small" color="dark" name="cart"></ion-icon> {{clienteAct.cliente}}
+                            <ion-icon slot="end" color="dark" name="arrow-round-down" (click)="actimgpedido()"></ion-icon>
+                        </h6>
                     </ion-text>
+
                     <hr class="bg-tertiary">
                     <ion-searchbar class="margin-top" [(ngModel)]="buscar_itemped" (ionInput)="buscar_productosped($event)" placeholder="Buscar producto"></ion-searchbar>
                     <div *ngIf="searchingped" class="spinner-container">

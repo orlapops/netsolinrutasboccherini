@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { TranslateProvider } from '../../providers';
 import { ProdsService } from '../../providers/prods/prods.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClienteProvider } from '../../providers/cliente.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { VisitasProvider } from '../../providers/visitas/visitas.service';
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 
 @Component({
   selector: 'app-factura',
@@ -15,14 +17,20 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class FacturaPage implements OnInit {
   factura: Array<any> = [];
   total_fact = 0;
+  grabando_factura = false;
+  grabo_factura = false;
+  mostrandoresulado = false;
   constructor(
     public navCtrl: NavController,
+    public btCtrl: BluetoothSerial,
+    public alertCtrl: AlertController,
     private translate: TranslateProvider,
     public _prods: ProdsService,
     public route: ActivatedRoute,
     public router: Router,
     public _DomSanitizer: DomSanitizer,
     public _cliente: ClienteProvider,
+    public _visitas: VisitasProvider
     ) { }
 
   ngOnInit() {
@@ -36,7 +44,6 @@ export class FacturaPage implements OnInit {
       })
       .catch(error => alert(JSON.stringify(error)));
   }
-
   getFactura() {
     this._prods.getFactura()
       .then(data => {
@@ -64,9 +71,97 @@ export class FacturaPage implements OnInit {
       console.log("SUMA")
       console.log (this.total_fact)
     }
-
+  }
+  realizar_factura(){
+    this.grabando_factura = true;
+    this._prods.genera_factura_netsolin()
+    .then(res => {
+      if (res){
+        this.mostrandoresulado = true;
+        this.grabo_factura = true;
+        console.log('retorna genera_factura_netsolin res:', res);
+      } else {
+        this.mostrandoresulado = true;
+        this.grabo_factura = false;
+        this.grabando_factura = true;
+        console.log('retorna genera_factura_netsolin error : ', this._visitas.visita_activa_copvdet.resgrb_factu);  
+      }
+    })
+    .catch(error => {
+      this.mostrandoresulado = true;
+      this.grabo_factura = false;
+      this.grabando_factura = true;
+      console.log('retorna genera_factura_netsolin error.message: ', error.message);
+    });
+  }
+  
+  quitar_resuladograbofact(){
+    if (this.grabo_factura){
+      this.factura = [];
+      this.grabo_factura = false;
+      this._prods.borrar_storage_factura();
+    }
+    this.grabando_factura = false;
+    this.mostrandoresulado = false;    
   }
 
+  imprimir_factura() {
+    let printer;
+    this.btCtrl.list().then(async datalist => {
+      let sp = datalist;
+      let input =[];
+      sp.forEach(element => {
+        let val = {name: element.id, type: 'radio', label: element.name, value: element};
+        input.push(val);
+      });
+      const alert = await this.alertCtrl.create({
+        header: 'Selecciona impresora',
+        inputs: input,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              console.log('Confirm Cancel');
+            }
+          }, {
+            
+            text: 'Ok',
+            handler: (inpu) => {
+              printer = inpu;
+              console.log(inpu);
+              const printing = this.btCtrl.connect(printer.id).subscribe(data => {
+                this.btCtrl.connect(printer.id);
+                this.btCtrl.write('Probando impresora... \nFunciona :)\n').then(async msg => {
+                  const alert2 = await this.alertCtrl.create({
+                    message: 'printing',
+                    buttons: ['Cancel']
+                  });
+                   await alert2.present();
+                }, async err => {
+                   const alerter = await this.alertCtrl.create({
+                    message: 'ERROR' + err,
+                    buttons: ['Cancelar']
+                  });
+                   await alerter.present();
+                });
+              });              
+            }
+          }
+        ]
+      });
+       await alert.present();
+    }, async err => {
+      console.log('No se pudo conectar', err);
+       const alert = await this.alertCtrl.create({
+        message: 'ERROR' + err,
+        buttons: ['Cancelar']
+      });
+       await alert.present();
+    });
+
+  }
 }
 
 

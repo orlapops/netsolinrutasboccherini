@@ -65,12 +65,17 @@ export class ProdsService implements OnInit {
         );
         resolve(true);
       }
+      const lparfiltro = {
+        bodega: this._parempre.usuario.bod_factura,
+        ubicacion: this._parempre.usuario.placa_veh
+      };
       //  NetsolinApp.objenvrest.filtro = this.bodega;
       NetsolinApp.objenvrest.filtro = this._parempre.usuario.bod_factura;
+      NetsolinApp.objenvrest.parametros = lparfiltro;
       // console.log(" cargaInventarioNetsolin 1");
       let url =
         this._parempre.URL_SERVICIOS +
-        "netsolin_servirestgo.csvc?VRCod_obj=INVXBODAPP";
+        "netsolin_servirestgo.csvc?VRCod_obj=INVXBODUBIAPP";
       console.log("cargaInventarioNetsolin url", url);
       console.log(
         "cargaInventarioNetsolin NetsolinApp.objenvrest",
@@ -88,8 +93,6 @@ export class ProdsService implements OnInit {
           this.cargoInventarioNetsolin = true;
           // this.menerror_usuar="";
           this.inventario = data.inventario;
-          //Actualizar link imagen solo para que actualice en Netsolin el link se comentarea cuando no
-          // this.actLinkimg();
           resolve(true);
         }
         // console.log(" cargaInventarioNetsolin 4");
@@ -200,6 +203,26 @@ export class ProdsService implements OnInit {
       });
     }
   }
+
+  //actualizar link imagen verifica si en firestorage imagenes producto existe y actualiza el lin
+  actLinkimgPed(){
+    for (let i = 0; i < this.inventarioPed.length; i++) {  
+      let lcodref = this.inventarioPed[i].cod_refinv;
+      let larchivo = '/imagenes/' + lcodref.trim() + '.jpg';
+      const ref = this.afStorage.ref(larchivo);
+      // console.log('En traer imagenes ducha prueba ref:' + larchivo, ref);
+      // console.log('En traer imagenes ducha prueba ref:' + larchivo, ref.getDownloadURL.length);
+      // console.log('En traer imagenes ducha prueba ref:' + larchivo, ref.getDownloadURL());
+      this.inventarioPed[i].link_imgfb = '';
+      ref.getDownloadURL().subscribe((url: any) =>  {
+        this.inventarioPed[i].link_imgfb = url;
+        //actualizar en netsolin
+        this.actualizaimagenProductoNetsolin(this.inventarioPed[i].cod_refinv, url);
+          // console.log('En actLinkimg suscribe url:' + larchivo, url);        
+      });
+    }
+  }
+
 
   //guardar el inventario factura en firebase
   public guardarInvdFB(id, inventario) {
@@ -650,6 +673,79 @@ export class ProdsService implements OnInit {
       // .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/pedidos`)
       // .doc(id).set(objpedido);
     }
+
+    genera_factura_netsolin() {
+      console.log('dataos para generar factura this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet);
+      console.log('Factura a genera this.pedido): ', this.factura);
+      this._visitas.visita_activa_copvdet.grb_factu = false;
+      this._visitas.visita_activa_copvdet.resgrb_factu = '';
+      this._visitas.visita_activa_copvdet.factura_grabada = null;
+      this._visitas.visita_activa_copvdet.errorgrb_factu = false;
+      return new Promise((resolve, reject) => {
+        let paramgrab = {
+          // datos_gen: this._visitas.visita_activa_copvdet.datosgen,
+          datos_gen: this._visitas.visita_activa_copvdet,
+          items_factura: this.factura,
+          usuario: this._parempre.usuario
+        };
+        NetsolinApp.objenvrest.filtro = '';
+        NetsolinApp.objenvrest.parametros = paramgrab;
+        let url =
+          this._parempre.URL_SERVICIOS +
+          "netsolin_servirestgo.csvc?VRCod_obj=APPGENFACTURA";
+        this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
+          console.log(" genera_factura_netsolin data:", data);
+          if (data.error) {
+            this._visitas.visita_activa_copvdet.errorgrb_factu = true;
+            this._visitas.visita_activa_copvdet.grb_factu = false;
+            this._visitas.visita_activa_copvdet.resgrb_factu = data.men_error;      
+            this._visitas.visita_activa_copvdet.menerrorgrb_factu = data.men_error;
+            console.error(" genera_factura_netsolin ", data.men_error);
+            resolve(false);
+          } else {
+            if (data.isCallbackError || data.error) {
+              this._visitas.visita_activa_copvdet.errorgrb_factu = true;
+              this._visitas.visita_activa_copvdet.grb_factu = false;
+              this._visitas.visita_activa_copvdet.resgrb_factu = data.messages;      
+              this._visitas.visita_activa_copvdet.resgrb_factu = data.messages;      
+              this._visitas.visita_activa_copvdet.menerrorgrb_factu = data.messages[0].menerror;
+              console.error(" Error genera_factura_netsolin ", data.messages[0].menerror);
+              resolve(false);
+            } else {
+            this._visitas.visita_activa_copvdet.errorgrb_factu = false;
+            this._visitas.visita_activa_copvdet.grb_factu = true;
+            this._visitas.visita_activa_copvdet.resgrb_factu = 'Se grabo factura';      
+            this._visitas.visita_activa_copvdet.factura_grabada = data;
+            console.log("Datos traer genera_factura_netsolin ",data);
+            const objfacturagfb ={
+              cod_dfactur : data.cod_dfacturg,
+              num_dfactur : data.num_dfacturg,
+              fecha : data.fecha,
+              cod_usuar : this._parempre.usuario.cod_usuar,
+              id_visita : this._visitas.visita_activa_copvdet.id_visita,
+              direccion : this._visitas.visita_activa_copvdet.direccion,
+              id_dir : this._visitas.visita_activa_copvdet.id_dir,
+              detalle : data.factura_grabada
+            };
+              this.guardarfacturaFb(data.cod_tercer, data.cod_dfacturg.trim() + data.num_dfacturg.trim(), objfacturagfb).then(res => {
+                console.log('Factura guardada res: ', res);
+                resolve(true);
+              })
+              .catch((err) => {
+                  console.log('Error guardando factura en Fb', err);
+                  resolve(false);
+              });
+              // resolve(true);
+            }
+          }
+          console.log(" genera_factura_netsolin 4");
+        });
+      });
+    }
+      // Actualiza url firestorage en Netsolin, para cuando se traiga sea màs rapido
+      guardarfacturaFb(cod_tercer, id, objfactura) {
+        return this.fbDb.collection(`/clientes/${cod_tercer}/facturas/`).doc(id).set(objfactura);
+      }    
 }
 
 

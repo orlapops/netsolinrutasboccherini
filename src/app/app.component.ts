@@ -14,7 +14,7 @@ import { AuthService } from './providers/auth.service';
 import { UbicacionProvider } from './providers/ubicacion/ubicacion.service';
 import { expressionType } from '@angular/compiler/src/output/output_ast';
 // import * as jstest from '../assets/js/netsolin.js'
-declare var testvar;
+// declare var testvar;
 // declare var ePosDev = new epson.ePOSDevice();
 @Component({
   selector: 'app-root',
@@ -36,7 +36,7 @@ export class AppComponent {
     public ubicacionService: UbicacionProvider,
     public navCtrl: NavController
   ) {
-    console.log('vartext js: ' + testvar);
+    // console.log('vartext js: ' + testvar);
     // console.log(jsext_prueba('retornado por js'));
     this.appPages = [
       {

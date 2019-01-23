@@ -245,11 +245,12 @@ cargaPeriodoUsuar(pcod_usuar){
                     datos.errorgrb_pedido = false;
                     datos.grb_factu = false;
                     datos.resgrb_factu = '';
-                    datos.pedido_factu = null;
+                    datos.factura_grabada = null;
                     datos.errorgrb_factu = false;
+                    datos.menerrorgrb_factu = '';
                     datos.grb_recibo = false;
                     datos.resgrb_recibo = '';
-                    datos.pedido_recibo = null;
+                    datos.recibo_grabado = null;
                     datos.errorgrb_recibo = false;
 
                     this.visita_activa = datos;
@@ -292,11 +293,12 @@ cargaPeriodoUsuar(pcod_usuar){
                         errorgrb_pedido: false,
                         grb_factu:false,
                         resgrb_factu: '',
-                        pedido_factu: null,
+                        factura_grabada: null,
                         errorgrb_factu: false,
+                        menerrorgrb_factu: '',
                         grb_recibo: false,
                         resgrb_recibo: '',
-                        pedido_recibo: null,
+                        recibo_grabado: null,
                         errorgrb_recibo: false
                     };
                     this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
@@ -348,11 +350,12 @@ cargaPeriodoUsuar(pcod_usuar){
                     datos.errorgrb_pedido = false;
                     datos.grb_factu = false;
                     datos.resgrb_factu = '';
-                    datos.pedido_factu = null;
+                    datos.factura_grabada = null;
                     datos.errorgrb_factu = false;
+                    datos.menerrorgrb_factu = '';
                     datos.grb_recibo = false;
                     datos.resgrb_recibo = '';
-                    datos.pedido_recibo = null;
+                    datos.recibo_grabado = null;
                     datos.errorgrb_recibo = false;
 
                     this.visita_activa = datos;
@@ -395,11 +398,12 @@ cargaPeriodoUsuar(pcod_usuar){
                         errorgrb_pedido: false,
                         grb_factu:false,
                         resgrb_factu: '',
-                        pedido_factu: null,
+                        factura_grabada: null,
                         errorgrb_factu: false,
+                        menerrorgrb_factu: '',
                         grb_recibo: false,
                         resgrb_recibo: '',
-                        pedido_recibo: null,
+                        recibo_grabado: null,
                         errorgrb_recibo: false
                     };
                     this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{

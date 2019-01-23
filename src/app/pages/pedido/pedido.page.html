@@ -4,7 +4,6 @@
             <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-title class="headercliente">Items a Pedir</ion-title>
-        <!-- <ion-title class="headercliente">{{_cliente.clienteActual.cliente}}</ion-title> -->
     </ion-toolbar>
 </ion-header>
 
@@ -15,17 +14,14 @@
     </ion-text>
     <hr class="bg-tertiary">
 
-    <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
+    <!-- <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
         Imprimir Pedido
-    </ion-button>
+    </ion-button> -->
 
     <div text-center *ngIf="pedido.length === 0" class="carrito_vacio">
 
         <ion-icon name="ios-cart-outline" class="icon-5x"></ion-icon>
         <br> No tiene items a Pedir
-        <!-- <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
-            Imprimir Pedido
-        </ion-button> -->
     </div>
     <div *ngIf="!grabando_pedido && !mostrandoresulado && pedido.length != 0" class="bg-white">
         <!-- <ion-grid class="bg-white">
@@ -112,7 +108,6 @@
         <ion-button *ngIf="!grabando_pedido && !mostrandoresulado" slot="end" shape="round" color="success" (click)="realizar_pedido()">
             Realizar Pedido
         </ion-button>
-        <!-- <ion-button *ngIf="visita_activa_copvdet.grb_pedido" slot="end" shape="round" color="success" (click)="imprimir_pedido()"> -->
     </div>
     <ion-card *ngIf="grabando_pedido && !mostrandoresulado">
         <ion-item padding class="animated fadeIn fast">
@@ -125,10 +120,10 @@
         <ion-text color="danger"> {{_visitas.visita_activa_copvdet.pedido_grabado.men_error}}</ion-text>
         <ion-item *ngFor="let iteme of _visitas.visita_activa_copvdet.resgrb_pedido; let i = index;" padding class="animated fadeIn fast">
             <ion-text color="danger"> {{iteme.menerror}}</ion-text>
-            <ion-button slot="end" shape="round" color="success" (click)="quitar_resuladograboped()">
-                Continuar
-            </ion-button>
         </ion-item>
+        <ion-button slot="end" shape="round" color="success" (click)="quitar_resuladograboped()">
+            Continuar
+        </ion-button>
     </ion-card>
     <ion-card class="btpedidotot-color" *ngIf="grabando_pedido && grabo_pedido && mostrandoresulado">
         <ion-text color="green"><strong> {{_visitas.visita_activa_copvdet.pedido_grabado.men_error}}</strong></ion-text>
