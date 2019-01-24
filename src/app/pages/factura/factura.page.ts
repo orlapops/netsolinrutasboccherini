@@ -125,7 +125,8 @@ export class FacturaPage implements OnInit {
             handler: () => {
               console.log('Confirm Cancel');
             }
-          }, {            
+          }, {     
+                   
             text: 'Ok',
             handler: (inpu) => {
               printer = inpu;
