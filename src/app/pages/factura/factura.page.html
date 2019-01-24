@@ -99,11 +99,11 @@
         </ion-button>
     </ion-card>
     <ion-card class="btpedidotot-color" *ngIf="grabando_factura && grabo_factura && mostrandoresulado">
-        <div>
-            {{_visitas.visita_activa_copvdet.factura_grabada.html_imp}}
-        </div>
         <ion-text color="green"><strong> {{_visitas.visita_activa_copvdet.factura_grabada.men_error}}</strong></ion-text>
-        <ion-grid class="btfacturatot-color">
+        <div>
+            <textarea class="texto_imprimir">{{_visitas.visita_activa_copvdet.factura_grabada.txt_imp}}</textarea>
+        </div>
+        <!-- <ion-grid class="btfacturatot-color">
             <ion-row>
                 <ion-col size="2">
                     Código
@@ -174,7 +174,7 @@
             <ion-col size="5">
                 <strong> {{ (_visitas.visita_activa_copvdet.factura_grabada.tvalneto + _visitas.visita_activa_copvdet.factura_grabada.tiva) | currency }}</strong>
             </ion-col>
-        </ion-row>
+        </ion-row> -->
         <ion-button slot="start" shape="round" color="success" (click)="imprimir_factura()">
             Imprimir Factura
         </ion-button>

@@ -79,6 +79,7 @@ export class FacturaPage implements OnInit {
       if (res){
         this.mostrandoresulado = true;
         this.grabo_factura = true;
+        this._prods.borrar_storage_factura();
         console.log('retorna genera_factura_netsolin res:', res);
       } else {
         this.mostrandoresulado = true;
@@ -99,7 +100,6 @@ export class FacturaPage implements OnInit {
     if (this.grabo_factura){
       this.factura = [];
       this.grabo_factura = false;
-      this._prods.borrar_storage_factura();
     }
     this.grabando_factura = false;
     this.mostrandoresulado = false;    
@@ -119,25 +119,25 @@ export class FacturaPage implements OnInit {
         inputs: input,
         buttons: [
           {
-            text: 'Cancel',
+            text: 'Cancelar',
             role: 'cancel',
             cssClass: 'secondary',
             handler: () => {
-              console.log('Confirm Cancel');
+              console.log('Confirm Cancelar');
             }
           }, {     
-                   
+
             text: 'Ok',
             handler: (inpu) => {
               printer = inpu;
               console.log(inpu);
-              console.log('a imprimir: ', this._visitas.visita_activa_copvdet.factura_grabada.html_imp);
+              console.log('a imprimir: ', this._visitas.visita_activa_copvdet.factura_grabada.txt_imp);
               const printing = this.btCtrl.connect(printer.id).subscribe(data => {
                 this.btCtrl.connect(printer.id);
-                this.btCtrl.write(this._visitas.visita_activa_copvdet.factura_grabada.html_imp).then(async msg => {
+                this.btCtrl.write(this._visitas.visita_activa_copvdet.factura_grabada.txt_imp).then(async msg => {
                 // this.btCtrl.write('Probando impresora... \nFunciona :)\n').then(async msg => {
                   const alert2 = await this.alertCtrl.create({
-                    message: 'printing',
+                    message: 'Imprimiendo',
                     buttons: ['Cancel']
                   });
                    await alert2.present();

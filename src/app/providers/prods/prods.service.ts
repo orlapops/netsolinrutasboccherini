@@ -56,6 +56,24 @@ export class ProdsService implements OnInit {
       ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)).snapshotChanges();
         // .where('id_ruta','==',idruta).orderBy('fecha_in')).snapshotChanges();
     }
+
+   public getUltFacturasClienteDirActual() {
+    // tslint:disable-next-line:max-line-length
+    console.log('getUltFacturasClienteDirActual:', `/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/facturas`);
+      // return this.fbDb.collection('rutas_d', ref => ref.where('id_reffecha', '==', fechaid).orderBy('fecha_in')).valueChanges();
+      return this.fbDb.collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/facturas`, ref => 
+        ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)).snapshotChanges();
+          // .where('id_ruta','==',idruta).orderBy('fecha_in')).snapshotChanges();
+      }
+
+      public getIdRegFactura(Id: string) {
+        console.log('en getIdRegFactura');
+      return this.fbDb
+        .collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/facturas`)
+       .doc(Id).valueChanges();
+      }
+    
+
   // Carga Inventario de la bodega para facturar en Netsolin
   cargaInventarioNetsolin() {
     return new Promise((resolve, reject) => {
@@ -725,7 +743,7 @@ export class ProdsService implements OnInit {
               id_visita : this._visitas.visita_activa_copvdet.id_visita,
               direccion : this._visitas.visita_activa_copvdet.direccion,
               id_dir : this._visitas.visita_activa_copvdet.id_dir,
-              html_imp : data.html_imp,
+              txt_imp : data.txt_imp,
               detalle : data.factura_grabada
             };
               this.guardarfacturaFb(data.cod_tercer, data.cod_dfacturg.trim() + data.num_dfacturg.trim(), objfacturagfb).then(res => {
