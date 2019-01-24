@@ -94,7 +94,7 @@ export class FacturaPage implements OnInit {
       console.log('retorna genera_factura_netsolin error.message: ', error.message);
     });
   }
-  
+
   quitar_resuladograbofact(){
     if (this.grabo_factura){
       this.factura = [];
@@ -131,8 +131,10 @@ export class FacturaPage implements OnInit {
             handler: (inpu) => {
               printer = inpu;
               console.log(inpu);
+              console.Console('a imprimir: ', this._visitas.visita_activa_copvdet.factura_grabada.html_imp);
               const printing = this.btCtrl.connect(printer.id).subscribe(data => {
                 this.btCtrl.connect(printer.id);
+                this.btCtrl.write(this._visitas.visita_activa_copvdet.factura_grabada.html_imp).then(async msg => {
                 this.btCtrl.write('Probando impresora... \nFunciona :)\n').then(async msg => {
                   const alert2 = await this.alertCtrl.create({
                     message: 'printing',

@@ -99,6 +99,9 @@
         </ion-button>
     </ion-card>
     <ion-card class="btpedidotot-color" *ngIf="grabando_factura && grabo_factura && mostrandoresulado">
+        <div>
+            {{_visitas.visita_activa_copvdet.factura_grabada.html_imp}}
+        </div>
         <ion-text color="green"><strong> {{_visitas.visita_activa_copvdet.factura_grabada.men_error}}</strong></ion-text>
         <ion-grid class="btfacturatot-color">
             <ion-row>

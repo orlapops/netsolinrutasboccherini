@@ -725,6 +725,7 @@ export class ProdsService implements OnInit {
               id_visita : this._visitas.visita_activa_copvdet.id_visita,
               direccion : this._visitas.visita_activa_copvdet.direccion,
               id_dir : this._visitas.visita_activa_copvdet.id_dir,
+              html_imp : data.html_imp,
               detalle : data.factura_grabada
             };
               this.guardarfacturaFb(data.cod_tercer, data.cod_dfacturg.trim() + data.num_dfacturg.trim(), objfacturagfb).then(res => {
