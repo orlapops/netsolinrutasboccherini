@@ -13,6 +13,7 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 })
 export class VerfacturaPage implements OnInit {
   txtFact = '';
+  txtFactImp = '';
   idact: any = this.route.snapshot.paramMap.get("id");
   tipocrud =  'A';
   FactAct: any;
@@ -37,6 +38,7 @@ export class VerfacturaPage implements OnInit {
           console.log(' datos factura ', datos);
           if (datos){
           this.txtFact = datos.txt_imp;
+          this.txtFactImp = datos.txt_imp;
           this.FactAct = datos;
           this.cargofact = true;
           }
@@ -72,13 +74,13 @@ export class VerfacturaPage implements OnInit {
             handler: (inpu) => {
               printer = inpu;
               console.log(inpu);
-              console.log('a imprimir: ', this.txtFact);
+              console.log('a imprimir: ', this.txtFactImp);
               const printing = this.btCtrl.connect(printer.id).subscribe(data => {
                 this.btCtrl.connect(printer.id);
-                this.btCtrl.write(this.txtFact).then(async msg => {
+                this.btCtrl.write(this.txtFactImp).then(async msg => {
                   const alert2 = await this.alertCtrl.create({
                     message: 'Imprimiendo',
-                    buttons: ['Cancel']
+                    buttons: ['Ok']
                   });
                    await alert2.present();
                 }, async err => {

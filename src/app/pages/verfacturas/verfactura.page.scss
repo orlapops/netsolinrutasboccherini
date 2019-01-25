@@ -4,6 +4,10 @@
     }
 }
 
+.textareafact {
+    font-size: smaller;
+}
+
 .profile {
     ion-card {
         width: 100%;
@@ -29,6 +33,9 @@
                 margin-top: .5rem;
                 // color: #fff;
             }
+            textarea {
+                font-size: smaller;
+            }
             //   h3 {
             //     font-size: 1.8rem;
             //     color: #fff;
@@ -45,8 +52,4 @@
             margin: 0;
         }
     }
-}
-
-.txtimp {
-    height: 400px;
 }

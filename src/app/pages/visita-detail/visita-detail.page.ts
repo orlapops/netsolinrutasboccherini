@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ActionSheetController, ToastController, ModalController, Platform } from '@ionic/angular';
+import { NavController, ActionSheetController, ToastController, ModalController, Platform, LoadingController } from '@ionic/angular';
 import { TranslateProvider } from '../../providers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImagePage } from './../modal/image/image.page';
@@ -87,6 +87,7 @@ export class VisitaDetailPage implements OnInit {
     public _DomSanitizer: DomSanitizer,
     public router: Router,
     private camera: Camera,
+    public loadingCtrl: LoadingController,
     private impresora: BluetoothSerial
   ) {   
     platform.ready().then(() => {
@@ -227,6 +228,15 @@ export class VisitaDetailPage implements OnInit {
     return await modal.present();
   }
 
+  async presentLoading(pmensaje) {
+    const loading = await this.loadingCtrl.create({
+      message: pmensaje,
+      spinner: 'dots',
+      duration: 2000
+    });
+    return await loading.present();
+  }
+
 
   registrarIngresoVisita() {
     const datactvisita = {
@@ -330,6 +340,7 @@ export class VisitaDetailPage implements OnInit {
         mediaType: this.camera.MediaType.PICTURE
       };
       this.camera.getPicture(optionscam).then((imageData) => {
+        this.presentLoading('Guardando Imagen');
         console.log('en mostrar camara2 optionscam:',optionscam);
         console.log('en mostrar camara2 imageData:',imageData);
         this.imagenPreview = `data:image/jpeg;base64,${imageData}`; 
@@ -342,6 +353,8 @@ export class VisitaDetailPage implements OnInit {
        });
        console.log('en mostrar camara4');
   }
+
+
   public eliminarFoto(ifoto){
     console.log('En eliminar foto ', ifoto);
 

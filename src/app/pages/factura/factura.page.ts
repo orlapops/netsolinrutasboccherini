@@ -138,7 +138,7 @@ export class FacturaPage implements OnInit {
                 // this.btCtrl.write('Probando impresora... \nFunciona :)\n').then(async msg => {
                   const alert2 = await this.alertCtrl.create({
                     message: 'Imprimiendo',
-                    buttons: ['Cancel']
+                    buttons: ['Ok']
                   });
                    await alert2.present();
                 }, async err => {

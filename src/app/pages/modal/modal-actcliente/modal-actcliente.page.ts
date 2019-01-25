@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { NavController, ModalController, ActionSheetController, Platform } from '@ionic/angular';
+import { NavController, ModalController, ActionSheetController, Platform, LoadingController } from '@ionic/angular';
 import { VisitasProvider } from '../../../providers/visitas/visitas.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
@@ -40,6 +40,7 @@ export class ModalActClientePage implements OnInit {
     public geolocation: Geolocation,
     private actionSheetCtrl: ActionSheetController,
     private storage: AngularFireStorage,
+    public loadingCtrl: LoadingController,
     public _DomSanitizer: DomSanitizer,
     private camera: Camera) { 
       console.log('llega coords:',  this.coords);
@@ -69,6 +70,15 @@ export class ModalActClientePage implements OnInit {
     })
 
   }
+  async presentLoading(pmensaje) {
+    const loading = await this.loadingCtrl.create({
+      message: pmensaje,
+      spinner: 'dots',
+      duration: 2000
+    });
+    return await loading.present();
+  }
+
   uploadFile(event) {
     const file = event.target.files[0];
     const filePath = 'demo126';
@@ -110,6 +120,7 @@ export class ModalActClientePage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(optionscam).then((imageData) => {
+      this.presentLoading('Guardando Imagen');
       console.log('en mostrar camara2');
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
@@ -146,6 +157,7 @@ export class ModalActClientePage implements OnInit {
       longitud : this.coords.lng
     };
     this._visitas.actualizarVisita(this._visitas.visita_activa_copvdet.id_visita, datactvisita);
+    this.presentLoading('Actualizando ubicación');
     // this._visitas.actualizarUbicaVisitaAct(this.coords.lng, this.coords.lat);
   }
 
