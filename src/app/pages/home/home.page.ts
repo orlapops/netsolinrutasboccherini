@@ -12,15 +12,17 @@ import { Injectable } from "@angular/core";
 
 import { environment } from "../../../environments/environment";
 import { ParEmpreService } from "../../providers/par-empre.service";
-import { VisitasProvider } from "../../providers/visitas/visitas.service";
+// import { VisitasProvider } from "../../providers/visitas/visitas.service";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { ModalNuevaVisitaPage } from "../modal/modal-nueva-visita/modal-nueva-visita.page";
-import { VisitanService } from "../../providers/visitan.service";
+// import { VisitanService } from "../../providers/visitan.service";
 import { Observable } from "rxjs";
 import { Router } from "@angular/router";
 import { ProdsService } from "../../providers/prods/prods.service";
 import { UbicacionProvider } from '../../providers/ubicacion/ubicacion.service';
 import { ActividadesService } from '../../providers/actividades/actividades.service';
+import { VisitasProvider } from '../../providers/visitas/visitas.service';
+
 @Injectable({
   providedIn: "root"
 })
@@ -75,7 +77,6 @@ export class HomePage implements OnInit {
     public _visitas: VisitasProvider,
     public _prods: ProdsService,
     public _actividades: ActividadesService,
-    private viistaService: VisitanService,
     public _ubicacionService: UbicacionProvider
   ) {
     // this.visitas = this._visitas.cargaRutaActiva();
@@ -96,21 +97,6 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    // console.log("ngOnInit home");
-    //para prueba traer de nuevo servicio la visita
-    //   this.viistaService.userId = '1014236804';
-    //   this.viistaService.cargaPeriodoUsuar(this.viistaService.userId).then(cargo => {
-    //     if (cargo) {
-    //       console.log('ngOnInit home CARGO cargaPeriodoUsuar');
-    //       this.visitnanList = this.viistaService.getVisitasList().valueChanges();
-    //       console.log('ngOnInit home CARGO cargaPeriodoUsuar   this.visitnanList :', this.visitnanList );
-    //     } else {
-    //       console.log('ngOnInit home NO CARGO cargaPeriodoUsuar');
-    //     }
-    //   })
-    //    .catch( error => {
-    //     console.log('error en cargaPeriodoUsuar ', error);
-    // });
 
     // console.log(this._visitas.visitaTodas);
     //Actualizar Inventario para factura y pedido a Firebase
@@ -250,23 +236,6 @@ export class HomePage implements OnInit {
       .map((v, i) => i);
   }
 
-  // getItems(ev: any) {
-  //   // Reset items back to all of the items
-  //   this.initializeItems();
-
-  //   // set val to the value of the searchbar
-  //   const val = ev.target.value;
-
-  //   // if the value is an empty string don't filter the items
-  //   if (val && val.trim() !== "") {
-  //     this.showItems = true;
-  //     this.items = this.items.filter(item => {
-  //       return item.toLowerCase().indexOf(val.toLowerCase()) > -1;
-  //     });
-  //   } else {
-  //     this.showItems = false;
-  //   }
-  // }
 
   obtenerPosicion(): any {
     this.geolocation
@@ -369,21 +338,18 @@ export class HomePage implements OnInit {
           role: "destructive",
           icon: "trash",
           handler: () => {
-            // this.viistaService.removeBill(billId);
           }
         },
         {
           text: "More details",
           icon: "play",
           handler: () => {
-            // this.router.navigate(['/bill-detail', billId]);
           }
         },
         {
           text: "Mark as Paid!",
           icon: "checkmark",
           handler: () => {
-            // this.viistaService.payBill(billId);
           }
         },
         {

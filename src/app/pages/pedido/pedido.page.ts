@@ -79,6 +79,7 @@ export class PedidoPage implements OnInit {
       if (res){
         this.mostrandoresulado = true;
         this.grabo_pedido = true;
+        this._prods.borrar_storage_pedido();
         console.log('retorna genera_pedido_netsolin res:', res);
       } else {
         this.mostrandoresulado = true;
@@ -98,7 +99,6 @@ export class PedidoPage implements OnInit {
     if (this.grabo_pedido){
       this.pedido = [];
       this.grabo_pedido = false;
-      this._prods.borrar_storage_pedido();
     }
     this.grabando_pedido = false;
     this.mostrandoresulado = false;    
@@ -118,7 +118,7 @@ export class PedidoPage implements OnInit {
         inputs: input,
         buttons: [
           {
-            text: 'Cancel',
+            text: 'Cancelar',
             role: 'cancel',
             cssClass: 'secondary',
             handler: () => {
@@ -132,9 +132,9 @@ export class PedidoPage implements OnInit {
               console.log(inpu);
               const printing = this.btCtrl.connect(printer.id).subscribe(data => {
                 this.btCtrl.connect(printer.id);
-                this.btCtrl.write('Probando impresora... \nFunciona :)\n').then(async msg => {
+                this.btCtrl.write(this._visitas.visita_activa_copvdet.pedido_grabado.txt_imp).then(async msg => {
                   const alert2 = await this.alertCtrl.create({
-                    message: 'printing',
+                    message: 'Imprimiendo',
                     buttons: ['Cancel']
                   });
                    await alert2.present();

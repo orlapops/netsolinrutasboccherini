@@ -51,18 +51,32 @@ export class ProdsService implements OnInit {
  public getUltPedidosClienteDirActual() {
   // tslint:disable-next-line:max-line-length
   console.log('getUltPedidosClienteDirActual:', `/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/pedidos`);
-    // return this.fbDb.collection('rutas_d', ref => ref.where('id_reffecha', '==', fechaid).orderBy('fecha_in')).valueChanges();
-    return this.fbDb.collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/pedidos`, ref => 
-      ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)).snapshotChanges();
-        // .where('id_ruta','==',idruta).orderBy('fecha_in')).snapshotChanges();
+    // return this.fbDb.collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/pedidos`, ref => 
+    //   ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)).snapshotChanges();
+      return this.fbDb.collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/pedidos`, ref => 
+        ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)
+        .orderBy('fecha', 'desc')
+        .limit(10))
+        .snapshotChanges();
+
     }
 
-   public getUltFacturasClienteDirActual() {
+    public getIdRegPedido(Id: string) {
+      console.log('en getIdRegPedido');
+    return this.fbDb
+      .collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/pedidos`)
+     .doc(Id).valueChanges();
+    }
+    
+    public getUltFacturasClienteDirActual() {
     // tslint:disable-next-line:max-line-length
     console.log('getUltFacturasClienteDirActual:', `/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/facturas`);
       // return this.fbDb.collection('rutas_d', ref => ref.where('id_reffecha', '==', fechaid).orderBy('fecha_in')).valueChanges();
       return this.fbDb.collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/facturas`, ref => 
-        ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)).snapshotChanges();
+        ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)
+        .orderBy('fecha', 'desc')
+        .limit(10))
+        .snapshotChanges();
           // .where('id_ruta','==',idruta).orderBy('fecha_in')).snapshotChanges();
       }
 
@@ -72,7 +86,7 @@ export class ProdsService implements OnInit {
         .collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/facturas`)
        .doc(Id).valueChanges();
       }
-    
+
 
   // Carga Inventario de la bodega para facturar en Netsolin
   cargaInventarioNetsolin() {
@@ -634,6 +648,7 @@ export class ProdsService implements OnInit {
           this._visitas.visita_activa_copvdet.errorgrb_pedido = true;
           this._visitas.visita_activa_copvdet.grb_pedido = false;
           this._visitas.visita_activa_copvdet.resgrb_pedido = data.men_error;      
+          this._visitas.visita_activa_copvdet.menerrorgrb_pedido = data.men_error;
           console.error(" genera_pedido_netsolin ", data.men_error);
           // this.cargoInventarioNetsolinPed = false;
           // this.inventarioPed = null;
@@ -642,8 +657,8 @@ export class ProdsService implements OnInit {
           if (data.isCallbackError || data.error) {
             this._visitas.visita_activa_copvdet.errorgrb_pedido = true;
             this._visitas.visita_activa_copvdet.grb_pedido = false;
-            // this._visitas.visita_activa_copvdet.resgrb_pedido = data.messages[0].menerror;      
             this._visitas.visita_activa_copvdet.resgrb_pedido = data.messages;      
+            this._visitas.visita_activa_copvdet.menerrorgrb_pedido = data.messages[0].menerror;
             console.error(" Error genera_pedido_netsolin ", data.messages[0].menerror);
             resolve(false);
           } else {
@@ -660,6 +675,7 @@ export class ProdsService implements OnInit {
             id_visita : this._visitas.visita_activa_copvdet.id_visita,
             direccion : this._visitas.visita_activa_copvdet.direccion,
             id_dir : this._visitas.visita_activa_copvdet.id_dir,
+            txt_imp : data.txt_imp,
             detalle : data.ped_grabado
           };
             this.guardarpedidoFb(data.cod_tercer, data.cod_dpedidg.trim() + data.num_dpedidg.trim(), objpedidogfb).then(res => {
@@ -724,7 +740,6 @@ export class ProdsService implements OnInit {
             if (data.isCallbackError || data.error) {
               this._visitas.visita_activa_copvdet.errorgrb_factu = true;
               this._visitas.visita_activa_copvdet.grb_factu = false;
-              this._visitas.visita_activa_copvdet.resgrb_factu = data.messages;      
               this._visitas.visita_activa_copvdet.resgrb_factu = data.messages;      
               this._visitas.visita_activa_copvdet.menerrorgrb_factu = data.messages[0].menerror;
               console.error(" Error genera_factura_netsolin ", data.messages[0].menerror);

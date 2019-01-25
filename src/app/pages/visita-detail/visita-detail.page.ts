@@ -232,7 +232,7 @@ export class VisitaDetailPage implements OnInit {
     const loading = await this.loadingCtrl.create({
       message: pmensaje,
       spinner: 'dots',
-      duration: 2000
+      duration: 3000
     });
     return await loading.present();
   }

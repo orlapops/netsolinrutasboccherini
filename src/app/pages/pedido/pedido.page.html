@@ -13,40 +13,12 @@
             <ion-icon size="small" color="dark" name="cart"></ion-icon>{{_cliente.clienteActual.cliente}}</h6>
     </ion-text>
     <hr class="bg-tertiary">
-
-    <!-- <ion-button slot="end" shape="round" color="success" (click)="imprimir_pedido()">
-        Imprimir Pedido
-    </ion-button> -->
-
     <div text-center *ngIf="pedido.length === 0" class="carrito_vacio">
 
         <ion-icon name="ios-cart-outline" class="icon-5x"></ion-icon>
         <br> No tiene items a Pedir
     </div>
     <div *ngIf="!grabando_pedido && !mostrandoresulado && pedido.length != 0" class="bg-white">
-        <!-- <ion-grid class="bg-white">
-            <ion-row *ngFor="let itemp of pedido; let i = index;">
-                <ion-col>
-                    <img *ngIf="itemp.item.link_imgfb" [src]="_DomSanitizer.bypassSecurityTrustUrl(itemp.item.link_imgfb)" />
-                    <img *ngIf="!itemp.item.link_imgfb" src="assets/img/imagennodisponible.jpg" />
-                </ion-col>
-                <ion-col>
-                    <ion-card class="bg-white">
-                        <ion-text color="primary" slot="start" tappable routerLink="/prod-detail.ped/{{itemp.item.cod_ref}}">
-                            {{itemp.item.cod_ref}} {{itemp.item.nombre}}
-                        </ion-text>
-                        <ion-input slot="start" (ionChange)="total(itemp,i)" [(ngModel)]="itemp.item.cantidad" type="number" min="1" max="1000" step="1" placeholder="Cantidad" clearOnEdit="true">
-                        </ion-input>
-                        <ion-text color="success" slot="end">
-                            Total: {{ itemp.item.total | currency }}
-                        </ion-text>
-                        <ion-button slot="end" shape="round" color="danger" (click)="deleteItem(itemp)">
-                            Eliminar
-                        </ion-button>
-                    </ion-card>
-                </ion-col>
-            </ion-row>
-        </ion-grid> -->
         <ion-grid class="btpedido-color">
             <ion-row *ngFor="let itemp of pedido; let i = index;">
                 <ion-col size="4">
@@ -116,10 +88,11 @@
         </ion-item>
     </ion-card>
 
-    <ion-card *ngIf="grabando_pedido && !grabo_pedido && mostrandoresulado">
-        <ion-text color="danger"> {{_visitas.visita_activa_copvdet.pedido_grabado.men_error}}</ion-text>
+    <ion-card *ngIf="grabando_pedido && !grabo_pedido && mostrandoresulado && _visitas.visita_activa_copvdet.errorgrb_pedido">
+        <!-- <ion-text color="danger"> {{_visitas.visita_activa_copvdet.pedido_grabado.men_error}}</ion-text> -->
+        <ion-text color="danger"> Error Grabando pedido </ion-text>
         <ion-item *ngFor="let iteme of _visitas.visita_activa_copvdet.resgrb_pedido; let i = index;" padding class="animated fadeIn fast">
-            <ion-text color="danger"> {{iteme.menerror}}</ion-text>
+            <ion-text color="danger"> {{iteme.menerror.trim()}}</ion-text>
         </ion-item>
         <ion-button slot="end" shape="round" color="success" (click)="quitar_resuladograboped()">
             Continuar
@@ -127,7 +100,10 @@
     </ion-card>
     <ion-card class="btpedidotot-color" *ngIf="grabando_pedido && grabo_pedido && mostrandoresulado">
         <ion-text color="green"><strong> {{_visitas.visita_activa_copvdet.pedido_grabado.men_error}}</strong></ion-text>
-        <ion-grid class="btpedidotot-color">
+        <div>
+            <textarea class="texto_imprimir">{{_visitas.visita_activa_copvdet.pedido_grabado.txt_imp}}</textarea>
+        </div>
+        <!-- <ion-grid class="btpedidotot-color">
             <ion-row>
                 <ion-col size="2">
                     Código
@@ -172,45 +148,33 @@
                     </div>
                 </ion-col>
             </ion-row>
-        </ion-grid>
-        <ion-grid class="btpedidotot-color">
+        </ion-grid> -->
+        <!-- <ion-grid class="btpedidotot-color">
             <ion-row>
                 <ion-col size="7">
-                    <!-- <h5> -->
                     <strong>Subtotal:</strong>
-                    <!-- </h5> -->
                 </ion-col>
                 <ion-col size="5">
-                    <!-- <h5> -->
                     <strong> {{ _visitas.visita_activa_copvdet.pedido_grabado.tvalneto | currency }}</strong>
-                    <!-- </h5> -->
                 </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col size="7">
-                    <!-- <h5> -->
                     <strong>Iva:</strong>
-                    <!-- </h5> -->
                 </ion-col>
                 <ion-col size="5">
-                    <!-- <h5> -->
                     <strong> {{ _visitas.visita_activa_copvdet.pedido_grabado.tiva | currency }}</strong>
-                    <!-- </h5> -->
                 </ion-col>
             </ion-row>
-        </ion-grid>
-        <ion-row>
+        </ion-grid> -->
+        <!-- <ion-row>
             <ion-col size="7">
-                <!-- <h4> -->
                 <strong>Total:</strong>
-                <!-- </h4> -->
             </ion-col>
             <ion-col size="5">
-                <!-- <h4> -->
                 <strong> {{ (_visitas.visita_activa_copvdet.pedido_grabado.tvalneto + _visitas.visita_activa_copvdet.pedido_grabado.tiva) | currency }}</strong>
-                <!-- </h4> -->
             </ion-col>
-        </ion-row>
+        </ion-row> -->
         <ion-button slot="start" shape="round" color="success" (click)="imprimir_pedido()">
             Imprimir Pedido
         </ion-button>

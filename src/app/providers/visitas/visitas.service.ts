@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { VISITAS } from "./mock-visitas";
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { ParEmpreService } from '../../providers/par-empre.service';
 import { NetsolinApp } from '../../shared/global';
@@ -57,7 +56,6 @@ export class VisitasProvider {
         public _cliente: ClienteProvider,
         // public _message: MessageService,
         public _parempre: ParEmpreService) {
-        this.visitas = VISITAS;
     }
 
     // inicializarVisitaActual(id){
@@ -219,215 +217,177 @@ cargaPeriodoUsuar(pcod_usuar){
 
   //Carga la visita activa busca si esta creada en reg_visitas, si no la crea si esta la trae
   //recibe la visita activa con el id busca y carga cartera de netsolin si no lo ha echo
-  cargaVisitaActivaUlt(visitaAct: any){
-    this.visita_activa = null;
-    // this.id_visita_activa = null;
-    this.cargo_clienteact = false;
-    this.direc_actual = null;
+//   cargaVisitaActivaUlt(visitaAct: any){
+//     this.visita_activa = null;
+//     this.cargo_clienteact = false;
+//     this.direc_actual = null;
 
-    // if (!this.cargocarteraNetsolin){
-        //llamar a Netsolin para traer la cartera
-        this._cliente.cargaClienteNetsolin(visitaAct.data.cod_tercer).then(cargo =>{
-            console.log('En cargaVisitaActiva 14 cargaClienteNetsolin cargo:', cargo);
-            // console.log('En cargaVisitaActiva cargo:', cargo);
-            this.cargo_clienteact = true;
-            this.getIdRegVisita(visitaAct.id).subscribe((datos: any) => {
-                console.log('En cargaVisitaActiva getIdRegVisita 1 datos:', datos);                
-                if (datos) {
-                    // console.log('En cargaVisitaActiva 2');
-                    // console.log('obtuvo visita actual datos:', datos);
-                    datos.cartera = this._cliente.clienteActual.cartera;
-                    datos.datosgen = visitaAct.data;
-                    //inicializa
-                    datos.grb_pedido = false;
-                    datos.resgrb_pedido = '';
-                    datos.pedido_grabado = null;
-                    datos.errorgrb_pedido = false;
-                    datos.grb_factu = false;
-                    datos.resgrb_factu = '';
-                    datos.factura_grabada = null;
-                    datos.errorgrb_factu = false;
-                    datos.menerrorgrb_factu = '';
-                    datos.grb_recibo = false;
-                    datos.resgrb_recibo = '';
-                    datos.recibo_grabado = null;
-                    datos.errorgrb_recibo = false;
+//         this._cliente.cargaClienteNetsolin(visitaAct.data.cod_tercer).then(cargo =>{
+//             console.log('En cargaVisitaActiva 14 cargaClienteNetsolin cargo:', cargo);
+//             this.cargo_clienteact = true;
+//             this.getIdRegVisita(visitaAct.id).subscribe((datos: any) => {
+//                 console.log('En cargaVisitaActiva getIdRegVisita 1 datos:', datos);                
+//                 if (datos) {
+//                     datos.cartera = this._cliente.clienteActual.cartera;
+//                     datos.datosgen = visitaAct.data;
+//                     datos.grb_pedido = false;
+//                     datos.resgrb_pedido = '';
+//                     datos.pedido_grabado = null;
+//                     datos.errorgrb_pedido = false;
+//                     datos.menerrorgrb_pedido = '';
+//                     datos.grb_factu = false;
+//                     datos.resgrb_factu = '';
+//                     datos.factura_grabada = null;
+//                     datos.errorgrb_factu = false;
+//                     datos.menerrorgrb_factu = '';
+//                     datos.grb_recibo = false;
+//                     datos.resgrb_recibo = '';
+//                     datos.recibo_grabado = null;
+//                     datos.errorgrb_recibo = false;
 
-                    this.visita_activa = datos;
-                    // this.id_visita_activa = visitaAct.id;
-                    //recorrer dicciones para ubicar direc actual y retornarla
-                    this._cliente.direcciones.forEach(itemdir => {
-                        if (datos.datosgen.id_dir === itemdir.id_dir){
-                            // console.log('asigno direccion actual', itemdir);
-                            this.direc_actual = itemdir;
-                        }                        
-                    });
-                    //actualizar firebase cloud cliente
-                    this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
-                        this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
-                            console.log('susc datos cliente fb ', datosc);
-                            this.direc_actual = datosc;
-                        });
-                        //  console.log('Cliente '+visitaAct.cod_tercer+' guardado en dbFB')
-                    });
-                    this._cliente.guardardireccionesCliente(visitaAct.data.cod_tercer);
-                //     .then(res =>{
-                //         console.log('Cliente '+visitaAct.cod_tercer+' guardado direcciones en dbFB')
-                //    });
-                   this.guardarVsita(visitaAct.id, this.visita_activa).then(res => {                       
-                        console.log('Visita guardada');
-                    });
-                } else {
-                    // console.log('En cargaVisitaActiva 3');
-                    // console.log('no se ha creado la visita en reg_visitas');
-                    const fh = Date.now();
-                    const visitaadd = {
-                        datosgen : visitaAct.data,
-                        estado : '',
-                        fechahora_ingreso : fh,
-                        // cartera : this.cartera
-                        cartera : null,
-                        grb_pedido: false,
-                        resgrb_pedido: '',
-                        pedido_grabado: null,
-                        errorgrb_pedido: false,
-                        grb_factu:false,
-                        resgrb_factu: '',
-                        factura_grabada: null,
-                        errorgrb_factu: false,
-                        menerrorgrb_factu: '',
-                        grb_recibo: false,
-                        resgrb_recibo: '',
-                        recibo_grabado: null,
-                        errorgrb_recibo: false
-                    };
-                    this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
-                        console.log('Cliente '+visitaAct.cod_tercer+' guardado en dbFB 2')
-                        this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
-                            console.log('susc datos cliente fb ', datosc);
-                            if (datosc.length >0){
+//                     this.visita_activa = datos;
+//                     this._cliente.direcciones.forEach(itemdir => {
+//                         if (datos.datosgen.id_dir === itemdir.id_dir){
+//                             this.direc_actual = itemdir;
+//                         }                        
+//                     });
+//                     this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
+//                         this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
+//                             console.log('susc datos cliente fb ', datosc);
+//                             this.direc_actual = datosc;
+//                         });
+//                     });
+//                     this._cliente.guardardireccionesCliente(visitaAct.data.cod_tercer);
+//                    this.guardarVsita(visitaAct.id, this.visita_activa).then(res => {                       
+//                         console.log('Visita guardada');
+//                     });
+//                 } else {
+//                     const fh = Date.now();
+//                     const visitaadd = {
+//                         datosgen : visitaAct.data,
+//                         estado : '',
+//                         fechahora_ingreso : fh,
+//                         cartera : null,
+//                         grb_pedido: false,
+//                         resgrb_pedido: '',
+//                         pedido_grabado: null,
+//                         errorgrb_pedido: false,
+//                         menerrorgrb_pedido: '',
+//                         grb_factu:false,
+//                         resgrb_factu: '',
+//                         factura_grabada: null,
+//                         errorgrb_factu: false,
+//                         menerrorgrb_factu: '',
+//                         grb_recibo: false,
+//                         resgrb_recibo: '',
+//                         recibo_grabado: null,
+//                         errorgrb_recibo: false
+//                     };
+//                     this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
+//                         console.log('Cliente '+visitaAct.cod_tercer+' guardado en dbFB 2')
+//                         this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
+//                             console.log('susc datos cliente fb ', datosc);
+//                             if (datosc.length >0){
 
-                            }
-                        });
+//                             }
+//                         });
 
-                   });
-                    this.guardarVsita(visitaAct.id, visitaadd).then(res => {
-                        // console.log('Visita guardada');
-                    });
-                }
-            });
-        })
-        .catch(() => {
-            console.log('error en carga visita activa');
-        });
-        // console.log('En cargaVisitaActiva 5');
-    // }
-  }
+//                    });
+//                     this.guardarVsita(visitaAct.id, visitaadd).then(res => {
+//                     });
+//                 }
+//             });
+//         })
+//         .catch(() => {
+//             console.log('error en carga visita activa');
+//         });
+//   }
 
-  cargaVisitaActivaVersionAnterior(visitaAct: any){
-    this.visita_activa = null;
-    // this.id_visita_activa = null;
-    this.cargo_clienteact = false;
-    this.direc_actual = null;
+//   cargaVisitaActivaVersionAnterior(visitaAct: any){
+//     this.visita_activa = null;
+//     this.cargo_clienteact = false;
+//     this.direc_actual = null;
 
-    // if (!this.cargocarteraNetsolin){
-        //llamar a Netsolin para traer la cartera
-        this._cliente.cargaClienteNetsolin(visitaAct.data.cod_tercer).then(cargo =>{
-            console.log('En cargaVisitaActiva 14 cargaClienteNetsolin cargo:', cargo);
-            // console.log('En cargaVisitaActiva cargo:', cargo);
-            this.cargo_clienteact = true;
-            this.getIdRegVisita(visitaAct.id).subscribe((datos: any) => {
-                console.log('En cargaVisitaActiva getIdRegVisita 1 datos:', datos);                
-                if (datos) {
-                    // console.log('En cargaVisitaActiva 2');
-                    // console.log('obtuvo visita actual datos:', datos);
-                    datos.cartera = this._cliente.clienteActual.cartera;
-                    datos.datosgen = visitaAct.data;
-                    //inicializa
-                    datos.grb_pedido = false;
-                    datos.resgrb_pedido = '';
-                    datos.pedido_grabado = null;
-                    datos.errorgrb_pedido = false;
-                    datos.grb_factu = false;
-                    datos.resgrb_factu = '';
-                    datos.factura_grabada = null;
-                    datos.errorgrb_factu = false;
-                    datos.menerrorgrb_factu = '';
-                    datos.grb_recibo = false;
-                    datos.resgrb_recibo = '';
-                    datos.recibo_grabado = null;
-                    datos.errorgrb_recibo = false;
+//         this._cliente.cargaClienteNetsolin(visitaAct.data.cod_tercer).then(cargo =>{
+//             console.log('En cargaVisitaActiva 14 cargaClienteNetsolin cargo:', cargo);
+//             this.cargo_clienteact = true;
+//             this.getIdRegVisita(visitaAct.id).subscribe((datos: any) => {
+//                 console.log('En cargaVisitaActiva getIdRegVisita 1 datos:', datos);                
+//                 if (datos) {
+//                     datos.cartera = this._cliente.clienteActual.cartera;
+//                     datos.datosgen = visitaAct.data;
+//                     datos.grb_pedido = false;
+//                     datos.resgrb_pedido = '';
+//                     datos.pedido_grabado = null;
+//                     datos.errorgrb_pedido = false;
+//                     datos.menerrorgrb_pedido = '';
+//                     datos.grb_factu = false;
+//                     datos.resgrb_factu = '';
+//                     datos.factura_grabada = null;
+//                     datos.errorgrb_factu = false;
+//                     datos.menerrorgrb_factu = '';
+//                     datos.grb_recibo = false;
+//                     datos.resgrb_recibo = '';
+//                     datos.recibo_grabado = null;
+//                     datos.errorgrb_recibo = false;
 
-                    this.visita_activa = datos;
-                    // this.id_visita_activa = visitaAct.id;
-                    //recorrer dicciones para ubicar direc actual y retornarla
-                    this._cliente.direcciones.forEach(itemdir => {
-                        if (datos.datosgen.id_dir === itemdir.id_dir){
-                            // console.log('asigno direccion actual', itemdir);
-                            this.direc_actual = itemdir;
-                        }                        
-                    });
-                    //actualizar firebase cloud cliente
-                    this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
-                        this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
-                            console.log('susc datos cliente fb ', datosc);
-                            this.direc_actual = datosc;
-                        });
-                        //  console.log('Cliente '+visitaAct.cod_tercer+' guardado en dbFB')
-                    });
-                    this._cliente.guardardireccionesCliente(visitaAct.data.cod_tercer);
-                //     .then(res =>{
-                //         console.log('Cliente '+visitaAct.cod_tercer+' guardado direcciones en dbFB')
-                //    });
-                   this.guardarVsita(visitaAct.id, this.visita_activa).then(res => {                       
-                        console.log('Visita guardada');
-                    });
-                } else {
-                    // console.log('En cargaVisitaActiva 3');
-                    // console.log('no se ha creado la visita en reg_visitas');
-                    const fh = Date.now();
-                    const visitaadd = {
-                        datosgen : visitaAct.data,
-                        estado : '',
-                        fechahora_ingreso : fh,
-                        // cartera : this.cartera
-                        cartera : null,
-                        grb_pedido: false,
-                        resgrb_pedido: '',
-                        pedido_grabado: null,
-                        errorgrb_pedido: false,
-                        grb_factu:false,
-                        resgrb_factu: '',
-                        factura_grabada: null,
-                        errorgrb_factu: false,
-                        menerrorgrb_factu: '',
-                        grb_recibo: false,
-                        resgrb_recibo: '',
-                        recibo_grabado: null,
-                        errorgrb_recibo: false
-                    };
-                    this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
-                        console.log('Cliente '+visitaAct.cod_tercer+' guardado en dbFB 2')
-                        this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
-                            console.log('susc datos cliente fb ', datosc);
-                            if (datosc.length >0){
+//                     this.visita_activa = datos;
+//                     this._cliente.direcciones.forEach(itemdir => {
+//                         if (datos.datosgen.id_dir === itemdir.id_dir){
+//                             this.direc_actual = itemdir;
+//                         }                        
+//                     });
+//                     this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
+//                         this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
+//                             console.log('susc datos cliente fb ', datosc);
+//                             this.direc_actual = datosc;
+//                         });
+//                     });
+//                     this._cliente.guardardireccionesCliente(visitaAct.data.cod_tercer);
+//                    this.guardarVsita(visitaAct.id, this.visita_activa).then(res => {                       
+//                         console.log('Visita guardada');
+//                     });
+//                 } else {
+//                     const fh = Date.now();
+//                     const visitaadd = {
+//                         datosgen : visitaAct.data,
+//                         estado : '',
+//                         fechahora_ingreso : fh,
+//                         cartera : null,
+//                         grb_pedido: false,
+//                         resgrb_pedido: '',
+//                         pedido_grabado: null,
+//                         errorgrb_pedido: false,
+//                         menerrorgrb_pedido: '',
+//                         grb_factu:false,
+//                         resgrb_factu: '',
+//                         factura_grabada: null,
+//                         errorgrb_factu: false,
+//                         menerrorgrb_factu: '',
+//                         grb_recibo: false,
+//                         resgrb_recibo: '',
+//                         recibo_grabado: null,
+//                         errorgrb_recibo: false
+//                     };
+//                     this._cliente.guardarClienteFb(visitaAct.data.cod_tercer).then(res =>{
+//                         console.log('Cliente '+visitaAct.cod_tercer+' guardado en dbFB 2')
+//                         this._cliente.getUbicaActFb(visitaAct.data.cod_tercer, this.direc_actual.id_dir).subscribe((datosc: any) => {
+//                             console.log('susc datos cliente fb ', datosc);
+//                             if (datosc.length >0){
 
-                            }
-                        });
+//                             }
+//                         });
 
-                   });
-                    this.guardarVsita(visitaAct.id, visitaadd).then(res => {
-                        // console.log('Visita guardada');
-                    });
-                }
-            });
-        })
-        .catch(() => {
-            console.log('error en carga visita activa');
-        });
-        // console.log('En cargaVisitaActiva 5');
-    // }
-  }
+//                    });
+//                     this.guardarVsita(visitaAct.id, visitaadd).then(res => {
+//                     });
+//                 }
+//             });
+//         })
+//         .catch(() => {
+//             console.log('error en carga visita activa');
+//         });
+//   }
   cargaVisitas(){
     // console.log('Ingreso a cargo visitas');
     return new Promise( (resolve, reject) => {

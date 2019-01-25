@@ -20,6 +20,7 @@ const routes: Routes = [
   { path: 'verfactura/:id', loadChildren: './pages/verfacturas/verfactura.module#VerfacturaPageModule' },
   { path: 'pedido', loadChildren: './pages/pedido/pedido.module#PedidoPageModule' },
   { path: 'ultpedido', loadChildren: './pages/pedido.ult/ultpedido.module#UltPedidoPageModule' },
+  { path: 'verpedido/:id', loadChildren: './pages/verpedidos/verpedido.module#VerpedidoPageModule' },
   { path: 'recibocaja', loadChildren: './pages/recibocaja/recibocaja.module#RecibocajaPageModule' },
   { path: 'recibo-detail/:id', loadChildren: './pages/recibo-detail/recibo-detail.module#ReciboDetailPageModule' },
   { path: 'about', loadChildren: './pages/about/about.module#AboutPageModule' },

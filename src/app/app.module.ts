@@ -36,7 +36,6 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { ModalNuevaVisitaPageModule } from './pages/modal/modal-nueva-visita/modal-nueva-visita.module';
 import { CarritoFacturaService } from './providers/carrito.factura.service';
-import { FirebaseService } from './providers/firebase.service';
 import { ClienteProvider } from './providers/cliente.service';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ModalActClientePageModule } from './pages/modal/modal-actcliente/modal-actcliente.module';
@@ -95,7 +94,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     SplashScreen,
     AuthService,
     ParEmpreService,
-    FirebaseService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     TranslateProvider,
     Geolocation,
