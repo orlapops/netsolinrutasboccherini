@@ -14,6 +14,9 @@ export class ReciboDetailPage implements OnInit {
   oblshop: any;
   num_obliga: any = this.route.snapshot.paramMap.get("id");
   valor_abono = 0;
+  dcto_duchas = 0;
+  dcto_otros = 0;
+  retencion = 0;
   total_t: number;
   oblenRecibo: any;
   constructor(
@@ -37,9 +40,25 @@ export class ReciboDetailPage implements OnInit {
     console.log('ngonit oblshop,oblenrecibo:',this.oblshop, this.oblenRecibo)
     if (this.oblenRecibo) {
       console.log('encontro en recibo');
-      this.valor_abono = this.oblenRecibo.abono;
+      if (this.oblenRecibo.abono === 0){
+        this.valor_abono = this.oblenRecibo.saldo;
+        this.dcto_duchas = 0;
+        this.dcto_otros = 0;
+        this.retencion = 0;
+      } else {
+        this.valor_abono = this.oblenRecibo.abono;
+        this.dcto_duchas = this.oblenRecibo.dcto_duchas;
+        this.dcto_otros = this.oblenRecibo.dcto_otros;
+        this.retencion = this.oblenRecibo.retencion;
+      }
       this.total_t = this.oblenRecibo.saldo;
-    }
+    } else {
+      this.valor_abono =   this.oblshop.saldo;
+      this.total_t = this.oblshop.saldo;
+      this.dcto_duchas = 0;
+      this.dcto_otros = 0;
+      this.retencion = 0;
+  }
   }
 
   checkout(oblshopID: number, obligID: number) {
@@ -53,7 +72,7 @@ export class ReciboDetailPage implements OnInit {
   }
 
   async addrecibo(item) {
-    this._recibo.addrecibocaja(item, this.valor_abono).then(async property => {
+    this._recibo.addrecibocaja(item, this.valor_abono, this.dcto_duchas, this.dcto_otros, this.retencion).then(async property => {
       const toast = await this.toastCtrl.create({
         showCloseButton: true,
         message: "Item adicionado a el recibo.",

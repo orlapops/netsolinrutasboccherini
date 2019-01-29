@@ -92,7 +92,7 @@ export class RecibosService implements OnInit {
   }
 
   //adiciona un item a factura
-  addrecibocaja(item, abono) {
+  addrecibocaja(item, abono, dcto_duchas, dcto_otros, retencion) {
     console.log("add item addrecibocaja item llega:", item);
     let exist = false;
 
@@ -100,8 +100,12 @@ export class RecibosService implements OnInit {
       this.recibocaja.forEach((val, i) => {
         if (val.item.num_obliga === item.num_obliga) {
           val.item.abono = abono;
+          val.item.dcto_duchas = dcto_duchas;
+          val.item.dcto_otros = dcto_otros;
+          val.item.retencion = retencion;
           val.item.saldoini = item.saldo;
           val.item.saldo = item.saldo - abono;
+          val.item.neto_recibir = abono - dcto_duchas - dcto_otros - retencion;
           exist = true;
         }
       });
@@ -113,6 +117,10 @@ export class RecibosService implements OnInit {
         num_obliga: item.num_obliga,
         fecha_obl: item.fecha_obl,
         abono: abono,
+        dcto_duchas: dcto_duchas,
+        dcto_otros: dcto_otros,
+        retencion: retencion,
+        neto_recibir: abono - dcto_duchas - dcto_otros - retencion,
         saldoini: item.saldo,
         saldo: item.saldo - abono,
         dias_venci: item.dias_venci
@@ -224,4 +232,144 @@ export class RecibosService implements OnInit {
     });
     return promesa;
   }  
+
+  public borrar_storage_recibo() {
+    const idruta = this._visitas.visita_activa_copvdet.id_ruta;
+    const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
+    const idirecibo = idruta.toString() + idvisiact.toString();
+    this.recibocaja = [];
+    if (this.platform.is("cordova")) {
+      // dispositivo
+      this.storage.remove("itemrecibo" + idirecibo);
+    } else {
+      // computadora
+      localStorage.removeItem("itemrecibo" + idirecibo);
+    }
+  }
+   
+  genera_recibo_netsolin(total_recibo, tdcto_duchas, tdcto_otros, tretencion, tneto_recibir, pag_efectivo, 
+    pag_cheq1, pag_ch1banco, pag_ch1cuenta, pag_numcheq1, pag_fechach1
+    pag_cheq2, pag_ch2banco, pag_ch2cuenta, pag_numcheq2, pag_fechach2) {
+    console.log('dataos para generar recibo this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet);
+    console.log('Recibo a genera this.recibo): ', this.recibocaja);
+    // return new Promise((resolve, reject) => {
+    //   resolve(true);
+    // });
+    this._visitas.visita_activa_copvdet.grb_recibo = false;
+    this._visitas.visita_activa_copvdet.resgrb_recibo = '';
+    this._visitas.visita_activa_copvdet.recibo_grabado = null;
+    this._visitas.visita_activa_copvdet.errorgrb_recibo = false;
+    return new Promise((resolve, reject) => {
+      let paramgrab = {
+        // datos_gen: this._visitas.visita_activa_copvdet.datosgen,
+        datos_gen: this._visitas.visita_activa_copvdet,
+        items_recibo: this.recibocaja,
+        total_recibo: total_recibo,
+        tdcto_duchas: tdcto_duchas,
+        tdcto_otros: tdcto_otros,
+        tretencion: tretencion,
+        tneto_recibir: tneto_recibir,
+        pag_efectivo: pag_efectivo,
+        pag_cheq1: pag_cheq1,
+        pag_ch1banco: pag_ch1banco,
+        pag_ch1cuenta: pag_ch1cuenta,
+        pag_cheq2: pag_cheq2,
+        pag_ch2banco: pag_ch2banco,
+        pag_ch2cuenta: pag_ch2cuenta,
+        pag_numcheq1: pag_numcheq1,
+        pag_fechach1: pag_fechach1,
+        pag_numcheq2: pag_numcheq2,
+        pag_fechach2: pag_fechach2,
+        usuario: this._parempre.usuario
+      };
+      NetsolinApp.objenvrest.filtro = '';
+      NetsolinApp.objenvrest.parametros = paramgrab;
+      let url =
+        this._parempre.URL_SERVICIOS +
+        "netsolin_servirestgo.csvc?VRCod_obj=APPGENRECCAJA";
+      this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
+        console.log(" genera_recibo_netsolin data:", data);
+        if (data.error) {
+          this._visitas.visita_activa_copvdet.errorgrb_recibo = true;
+          this._visitas.visita_activa_copvdet.grb_recibo = false;
+          this._visitas.visita_activa_copvdet.resgrb_recibo = data.men_error;      
+          this._visitas.visita_activa_copvdet.menerrorgrb_recibo = data.men_error;
+          console.error(" genera_recibo_netsolin ", data.men_error);
+          // this.cargoInventarioNetsolinPed = false;
+          // this.inventarioPed = null;
+          resolve(false);
+        } else {
+          if (data.isCallbackError || data.error) {
+            this._visitas.visita_activa_copvdet.errorgrb_recibo = true;
+            this._visitas.visita_activa_copvdet.grb_recibo = false;
+            this._visitas.visita_activa_copvdet.resgrb_recibo = data.messages;      
+            this._visitas.visita_activa_copvdet.menerrorgrb_recibo = data.messages[0].menerror;
+            console.error(" Error genera_recibo_netsolin ", data.messages[0].menerror);
+            resolve(false);
+          } else {
+          this._visitas.visita_activa_copvdet.errorgrb_recibo = false;
+          this._visitas.visita_activa_copvdet.grb_recibo = true;
+          this._visitas.visita_activa_copvdet.resgrb_recibo = 'Se grabo recibo';      
+          this._visitas.visita_activa_copvdet.recibo_grabado = data;
+          console.log("Datos traer genera_recibo_netsolin ",data);
+          const objrecibogfb ={
+            cod_docume : data.cod_docume,
+            num_docume : data.num_docume,
+            fecha : data.fecha,
+            cod_usuar : this._parempre.usuario.cod_usuar,
+            id_visita : this._visitas.visita_activa_copvdet.id_visita,
+            direccion : this._visitas.visita_activa_copvdet.direccion,
+            id_dir : this._visitas.visita_activa_copvdet.id_dir,
+            txt_imp : data.txt_imp,
+            detalle : data.recibo_grabado
+          };
+            this.guardarreciboFb(data.cod_tercer, data.cod_docume.trim() + data.num_docume.trim(), objrecibogfb).then(res => {
+              console.log('Recibo guardada res: ', res);
+              resolve(true);
+            })
+            .catch((err) => {
+                console.log('Error guardando recibo en Fb', err);
+                resolve(false);
+            });
+            // resolve(true);
+          }
+        }
+        console.log(" genera_recibo_netsolin 4");
+      });
+    });
+  }
+    // Actualiza url firestorage en Netsolin, para cuando se traiga sea màs rapido
+    guardarreciboFb(cod_tercer, id, objrecibo) {
+      console.log('guardarreciboFb cod_tercer:', cod_tercer);
+      console.log('guardarreciboFb id:', id);
+      console.log('guardarreciboFb objrecibo:', objrecibo);
+      console.log(`/clientes/${cod_tercer}/recibos/`);
+      return this.fbDb.collection(`/clientes/${cod_tercer}/recibos/`).doc(id).set(objrecibo);
+      // return this.fbDb
+      // tslint:disable-next-line:max-line-length
+      // .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/recibos`)
+      // .doc(id).set(objrecibo);
+      // .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this._visitas.visita_activa_copvdet.id_visita}/recibos`)
+      // .doc(id).set(objrecibo);
+    }
+    public getIdRegRecibo(Id: string) {
+      console.log('en getIdRegRecibo');
+    return this.fbDb
+      .collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/recibos`)
+     .doc(Id).valueChanges();
+    }
+    
+    
+    public getUltRecibosClienteDirActual() {
+      // tslint:disable-next-line:max-line-length
+      console.log('getUltRecibosClienteDirActual:', `/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/recibos`);
+        // return this.fbDb.collection('rutas_d', ref => ref.where('id_reffecha', '==', fechaid).orderBy('fecha_in')).valueChanges();
+        return this.fbDb.collection(`/clientes/${this._visitas.visita_activa_copvdet.cod_tercer}/recibos`, ref => 
+          ref.where('id_dir', '==', this._visitas.visita_activa_copvdet.id_dir)
+          .orderBy('fecha', 'desc')
+          .limit(10))
+          .snapshotChanges();
+            // .where('id_ruta','==',idruta).orderBy('fecha_in')).snapshotChanges();
+        }
+  
 }
