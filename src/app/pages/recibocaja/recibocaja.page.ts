@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { TranslateProvider } from '../../providers';
 import { VisitasProvider } from '../../providers/visitas/visitas.service';
 import { ParEmpreService } from '../../providers/par-empre.service';
 import { RecibosService } from '../../providers/recibos/recibos.service';
 import { ClienteProvider } from '../../providers/cliente.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 
 @Component({
   selector: 'app-recibocaja',
@@ -39,11 +41,14 @@ export class RecibocajaPage implements OnInit {
   constructor(
     public _parEmpre: ParEmpreService,
     public navCtrl: NavController,
+    public alertCtrl: AlertController,
+    public btCtrl: BluetoothSerial,
     private translate: TranslateProvider,
     public _visitas: VisitasProvider,
     public _cliente: ClienteProvider,
     public _recibos: RecibosService,
-  ) { }
+    public _DomSanitizer: DomSanitizer,
+    ) { }
 
   ngOnInit() {
     this.getRecibocaja();
