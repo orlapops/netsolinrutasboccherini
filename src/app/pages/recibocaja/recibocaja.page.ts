@@ -37,7 +37,8 @@ export class RecibocajaPage implements OnInit {
   grabando_recibo = false;
   grabo_recibo = false;
   mostrandoresulado = false;
-
+  vistapagos: String = 'verobls';
+  
   constructor(
     public _parEmpre: ParEmpreService,
     public navCtrl: NavController,
@@ -108,7 +109,7 @@ export class RecibocajaPage implements OnInit {
       if (res){
         this.mostrandoresulado = true;
         this.grabo_recibo = true;
-        // this._recibos.borrar_storage_recibo();
+        this._recibos.borrar_storage_recibo();
         console.log('retorna genera_pedido_netsolin res:', res);
       } else {
         this.mostrandoresulado = true;
