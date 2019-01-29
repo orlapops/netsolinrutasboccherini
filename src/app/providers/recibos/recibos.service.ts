@@ -248,7 +248,7 @@ export class RecibosService implements OnInit {
   }
    
   genera_recibo_netsolin(total_recibo, tdcto_duchas, tdcto_otros, tretencion, tneto_recibir, pag_efectivo, 
-    pag_cheq1, pag_ch1banco, pag_ch1cuenta, pag_numcheq1, pag_fechach1
+    pag_cheq1, pag_ch1banco, pag_ch1cuenta, pag_numcheq1, pag_fechach1,
     pag_cheq2, pag_ch2banco, pag_ch2cuenta, pag_numcheq2, pag_fechach2) {
     console.log('dataos para generar recibo this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet);
     console.log('Recibo a genera this.recibo): ', this.recibocaja);
