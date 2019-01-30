@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="netsolinrutasboccherini.com.netsolin" version="1.1.294" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="netsolinrutasboccherini.com.netsolin" version="1.1.30.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>NetsolinRutas Bochherini</name>
     <description>App Rutero comercial Boccherini.</description>
     <author email="info@netsolin.com" href="http://ionnetsolinicframework.com/">Equipo Netsolin</author>
@@ -84,7 +84,6 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
-    <plugin name="cordova-plugin-firebase" spec="2.0.5" />
     <plugin name="cordova-plugin-bluetooth-serial" spec="0.4.7" />
     <plugin name="cordova-plugin-ionic" spec="5.2.7">
         <variable name="APP_ID" value="f96dd34a" />
@@ -94,4 +93,5 @@
         <variable name="UPDATE_API" value="https://api.ionicjs.com" />
         <variable name="MIN_BACKGROUND_DURATION" value="30" />
     </plugin>
+    <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
 </widget>
